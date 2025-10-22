@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import Header from '@/components/Header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Search, Plus } from 'lucide-react';
+import equipmentBg from '@/assets/equipment-bg.png';
 
 interface Equipment {
   id: string;
@@ -63,11 +67,34 @@ const EquipmentMarketplace: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <main className="py-12 px-6 max-w-7xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4">Equipment Marketplace</h1>
-        <p className="text-lg text-muted-foreground mb-6">
-          Find agricultural equipment for rental, lease, or purchase
-        </p>
+      <Header />
+      
+      {/* Hero Section with Equipment Background */}
+      <section 
+        className="relative py-24 text-white overflow-hidden"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${equipmentBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 drop-shadow-lg">Equipment Marketplace</h1>
+          <p className="text-xl mb-8 max-w-3xl mx-auto drop-shadow-md opacity-95">
+            Find agricultural equipment for rental, lease, or purchase across Kenya
+          </p>
+          <Button size="lg" variant="secondary" className="shadow-xl">
+            <Plus className="h-4 w-4 mr-2" />
+            List Equipment
+          </Button>
+        </div>
+      </section>
+
+      <div className="container mx-auto px-4 py-16">
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold mb-4">Browse Equipment</h2>
+        </div>
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <Input
             placeholder="Search equipment..."
@@ -125,7 +152,7 @@ const EquipmentMarketplace: React.FC = () => {
             <div>No equipment found.</div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 };

@@ -44,7 +44,6 @@ import FarmerSuccessStories from './pages/FarmerSuccessStories';
 import CommunityForum from './pages/CommunityForum';
 const NetworkingPage = React.lazy(() => import('./components/NetworkingPage').then(module => ({ default: module.NetworkingPage })));
 import CarbonForum from './pages/CarbonForum';
-import FAQSupport from './pages/FAQSupport';
 import MajorRoutesMapPage from './pages/MajorRoutesMapPage';
 import { OfflineBanner } from './components/OfflineBanner';
 import TransporterSignUp from './pages/TransporterSignUp';
@@ -95,6 +94,9 @@ import EquipmentMarketplacePage from './pages/EquipmentMarketplacePage';
 import F2CMarketplace from './pages/F2CMarketplace';
 import BatchTracking from './pages/BatchTracking';
 import ApiManagement from './pages/ApiManagement';
+import FAQSupport from './pages/FAQSupport';
+import Jobs from './pages/Jobs';
+import FoodRescueHeroes from './pages/FoodRescueHeroes';
 
 function App() {
   return (
@@ -192,6 +194,9 @@ function App() {
           <Route path="/f2c-marketplace" element={<F2CMarketplace />} />
           <Route path="/batch-tracking" element={<BatchTracking />} />
           <Route path="/api-management" element={<ApiManagement />} />
+          <Route path="/faq-support" element={<FAQSupport />} />
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/food-rescue-heroes" element={<FoodRescueHeroes />} />
                    <Route path="*" element={<NotFound />} />
                </Routes>
               </React.Suspense>
