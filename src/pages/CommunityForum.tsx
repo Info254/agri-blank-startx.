@@ -193,11 +193,12 @@ const CommunityForum: React.FC = () => {
             <CardContent>
               <Button 
                 onClick={() => setShowCreateForm(true)} 
-                className="w-full"
+                className="w-full bg-primary hover:bg-primary/90"
                 disabled={!user}
+                size="lg"
               >
-                <Plus className="h-4 w-4 mr-2" />
-                New Post
+                <Plus className="h-5 w-5 mr-2" />
+                Start New Discussion
               </Button>
             </CardContent>
           </Card>

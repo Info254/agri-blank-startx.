@@ -8,6 +8,7 @@ import Footer from '@/components/Footer';
 import Hero from '@/components/Hero';
 import FeaturedContent from '@/components/FeaturedContent';
 import SearchSection from '@/components/SearchSection';
+import GlobalMarketplace from '@/components/GlobalMarketplace';
 import { 
   Tractor, 
   TrendingUp, 
@@ -31,6 +32,9 @@ const Index: React.FC = () => {
       
       {/* Hero Section */}
       <Hero />
+      
+      {/* Global Marketplace Section */}
+      <GlobalMarketplace />
       
       {/* Search Section */}
       <SearchSection />

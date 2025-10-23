@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.agriconnect.app',
-  appName: 'AgriConnect',
+  appId: 'com.sokoconnect.app',
+  appName: 'SokoConnect',
   webDir: 'dist',
   server: {
     url: 'https://e0faff55-0c76-43f2-ad79-6981b1cd15a5.lovableproject.com?forceHideBadge=true',

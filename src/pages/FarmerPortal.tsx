@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import Header from '@/components/Header';
+import farmerBg from '@/assets/farmer-portal-bg.png';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import FarmDashboard from '@/components/farm/FarmDashboard';
 import ProduceManagement from '@/components/farm/ProduceManagement';
@@ -69,11 +70,22 @@ const FarmerPortal: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <div className="container mx-auto py-6">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">Farmer Portal</h1>
-          <p className="text-muted-foreground">Manage your farm operations, crops, and animals</p>
+      {/* Hero Section with Farmer Background */}
+      <section 
+        className="relative py-16 text-white overflow-hidden"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${farmerBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl font-bold mb-2 drop-shadow-lg">Farmer Portal</h1>
+          <p className="text-xl drop-shadow-md opacity-95">Your Hub for Growth & Resources - Manage your farm operations, crops, and animals</p>
         </div>
+      </section>
+      <div className="container mx-auto py-6">
         {/* Mobile-optimized horizontal scroll tabs */}
         <Tabs defaultValue="dashboard" className="w-full">
           <div className="overflow-x-auto scrollbar-hide">

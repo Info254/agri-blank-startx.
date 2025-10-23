@@ -51,6 +51,12 @@ import ServiceProviderRegistration from './pages/ServiceProviderRegistration';
 import KilimoAmsData from './pages/KilimoAmsData';
 import ApiDocs from './pages/ApiDocs';
 import SupplyChainAPI from './pages/SupplyChainAPI';
+import LogisticsIssues from './pages/LogisticsIssues';
+import MarketAccess from './pages/MarketAccess';
+import CarbonCreditForum from './pages/CarbonCreditForum';
+import LogisticsIssues from './pages/LogisticsIssues';
+import MarketAccess from './pages/MarketAccess';
+import CarbonCreditForum from './pages/CarbonCreditForum';
 import PartnersShowcase from './pages/PartnersShowcase';
 import MajorRoutesMarketplace from './pages/MajorRoutesMarketplace';
 import DataManagement from './pages/DataManagement';
@@ -172,6 +178,9 @@ function App() {
                  <Route path="/kilimo-ams-data" element={<KilimoAmsData />} />
                  <Route path="/api-docs" element={<ApiDocs />} />
                  <Route path="/supply-chain-api" element={<SupplyChainAPI />} />
+                 <Route path="/supply-chain-problems/logistics-issues" element={<LogisticsIssues />} />
+                 <Route path="/supply-chain-problems/market-access" element={<MarketAccess />} />
+                 <Route path="/carbon-credit-forum" element={<CarbonCreditForum />} />
                  <Route path="/data-management" element={<DataManagement />} />
                  <Route path="/data-status" element={<DataStatus />} />
                  <Route path="/data-jobs" element={<DataJobs />} />

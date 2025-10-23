@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -173,20 +174,27 @@ export default function F2CMarketplace() {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6">
-        <div className="text-center">Loading subscription plans...</div>
+      <div className="min-h-screen">
+        <Header />
+        <div className="container mx-auto p-6">
+          <div className="text-center">Loading subscription plans...</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-8">
-      <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold text-primary">Farm-to-Consumer Marketplace</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Subscribe to fresh, organic produce delivered directly from local farms to your doorstep
-        </p>
-      </div>
+    <div className="min-h-screen">
+      <Header />
+      <section className="py-16 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl font-bold text-primary mb-4">Farm-to-Consumer Marketplace</h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+            Subscribe to fresh, organic produce delivered directly from local farms to your doorstep
+          </p>
+        </div>
+      </section>
+      <div className="container mx-auto p-6 space-y-8">
 
       {mySubscriptions.length > 0 && (
         <div className="space-y-4">

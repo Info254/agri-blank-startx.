@@ -84,8 +84,8 @@ const EquipmentMarketplace: React.FC = () => {
           <p className="text-xl mb-8 max-w-3xl mx-auto drop-shadow-md opacity-95">
             Find agricultural equipment for rental, lease, or purchase across Kenya
           </p>
-          <Button size="lg" variant="secondary" className="shadow-xl">
-            <Plus className="h-4 w-4 mr-2" />
+          <Button size="lg" variant="secondary" className="shadow-xl" onClick={() => alert('Equipment listing form would open here')}>
+            <Plus className="h-5 w-5 mr-2" />
             List Equipment
           </Button>
         </div>

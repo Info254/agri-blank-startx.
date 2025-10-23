@@ -24,7 +24,7 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = "agriconnect-ui-theme",
+  storageKey = "sokoconnect-ui-theme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
