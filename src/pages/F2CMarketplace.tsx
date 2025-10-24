@@ -344,6 +344,7 @@ export default function F2CMarketplace() {
           ))}
         </div>
       </div>
+      </div>
     </div>
   );
 }

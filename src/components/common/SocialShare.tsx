@@ -22,7 +22,7 @@ const SocialShare: React.FC<SocialShareProps> = ({
 }) => {
   const { toast } = useToast();
 
-  const shareText = `${title}\n\n${text}\n\nShared via AgriConnect: ${url}`;
+  const shareText = `${title}\n\n${text}\n\nShared via SokoConnect: ${url}`;
   const encodedText = encodeURIComponent(shareText);
   const encodedUrl = encodeURIComponent(url);
 

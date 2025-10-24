@@ -12,7 +12,7 @@ const PrivacyPolicyPage: React.FC = () => {
         <CardHeader className="space-y-4">
           <div className="flex items-center space-x-2">
             <Shield className="h-8 w-8 text-green-600" />
-            <CardTitle className="text-3xl">Privacy Policy - AgriConnect</CardTitle>
+            <CardTitle className="text-3xl">Privacy Policy - SokoConnect</CardTitle>
           </div>
           <div className="flex flex-wrap gap-2">
             <Badge variant="outline">Effective: January 1, 2024</Badge>
@@ -26,7 +26,7 @@ const PrivacyPolicyPage: React.FC = () => {
                 <h3 className="font-semibold text-blue-900">Important Notice</h3>
                 <p className="text-sm text-blue-800">
                   This Privacy Policy complies with Kenya's Data Protection Act (2019) and international standards. 
-                  By using AgriConnect, you agree to these terms and the collection and use of your information as described.
+                  By using SokoConnect, you agree to these terms and the collection and use of your information as described.
                 </p>
               </div>
             </div>
@@ -161,7 +161,7 @@ const PrivacyPolicyPage: React.FC = () => {
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                 <h3 className="font-semibold text-red-900 mb-2">WE DO NOT SELL YOUR PERSONAL DATA</h3>
                 <p className="text-sm text-red-800">
-                  AgriConnect never sells, trades, or rents your personal information to third parties for marketing purposes. 
+                  SokoConnect never sells, trades, or rents your personal information to third parties for marketing purposes. 
                   Your data is used solely to improve our agricultural platform and connect you with legitimate opportunities.
                 </p>
               </div>
@@ -300,7 +300,7 @@ const PrivacyPolicyPage: React.FC = () => {
                   <CardTitle className="text-lg">Data Protection Officer</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm space-y-1">
-                  <p><strong>Email:</strong> privacy@agriconnect.co.ke</p>
+                  <p><strong>Email:</strong> privacy@sokoconnect.co.ke</p>
                   <p><strong>Phone:</strong> +254 700 000 000</p>
                   <p><strong>Address:</strong> Nairobi, Kenya</p>
                   <p><strong>Response Time:</strong> 48-72 hours</p>
@@ -323,7 +323,7 @@ const PrivacyPolicyPage: React.FC = () => {
 
           <div className="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg text-center">
             <p className="text-sm font-medium text-green-900">
-              By using AgriConnect, you acknowledge that you have read, understood, and agree to this Privacy Policy. 
+              By using SokoConnect, you acknowledge that you have read, understood, and agree to this Privacy Policy. 
               This policy is governed by Kenyan data protection laws and international best practices.
             </p>
           </div>

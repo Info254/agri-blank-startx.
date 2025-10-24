@@ -66,7 +66,7 @@ const ApiDocs: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">AgriConnect API Documentation</h1>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">SokoConnect API Documentation</h1>
               <p className="text-muted-foreground max-w-3xl">
                 Production-ready API access to Kenya's agricultural data, market information, and supply chain intelligence
               </p>

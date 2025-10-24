@@ -1,7 +1,7 @@
-# AgriConnect - Comprehensive Agricultural Platform
+# SokoConnect - Comprehensive Agricultural Platform
 
 ## Product Overview
-AgriConnect is a revolutionary agricultural platform that connects farmers, buyers, suppliers, transporters, and service providers through both online and offline capabilities. The platform features advanced Bluetooth mesh networking for price discovery and marketplace functionality, even without internet connectivity.
+SokoConnect is a revolutionary agricultural platform that connects farmers, buyers, suppliers, transporters, and service providers through both online and offline capabilities. The platform features advanced Bluetooth mesh networking for price discovery and marketplace functionality, even without internet connectivity.
 
 ## Core Features
 
@@ -80,7 +80,7 @@ AgriConnect is a revolutionary agricultural platform that connects farmers, buye
 ### Bluetooth Technology
 - **Bluetooth Low Energy (BLE)**: Power-efficient communication
 - **Mesh Networking**: Device-to-device message relay
-- **Service Discovery**: Automatic detection of nearby AgriConnect users
+- **Service Discovery**: Automatic detection of nearby SokoConnect users
 - **Data Synchronization**: Intelligent sync of prices, alerts, and trader info
 
 ## Security Features

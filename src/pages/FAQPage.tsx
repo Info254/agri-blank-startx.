@@ -29,14 +29,14 @@ const FAQPage: React.FC = () => {
             <AccordionItem value="item-3">
               <AccordionTrigger>Is there a mobile app available?</AccordionTrigger>
               <AccordionContent>
-                Yes, AgriConnect is available as a mobile app for both Android and iOS devices.
+                Yes, SokoConnect is available as a mobile app for both Android and iOS devices.
               </AccordionContent>
             </AccordionItem>
             
             <AccordionItem value="item-4">
               <AccordionTrigger>How do I contact customer support?</AccordionTrigger>
               <AccordionContent>
-                You can contact our support team through the Contact page or email support@agriconnect.com
+                You can contact our support team through the Contact page or email sokoconnect@tenderzville-portal.co.ke
               </AccordionContent>
             </AccordionItem>
           </Accordion>

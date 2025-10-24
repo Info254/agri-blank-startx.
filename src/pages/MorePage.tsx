@@ -96,7 +96,7 @@ export default function MorePage() {
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold">More Features</h1>
           <p className="text-muted-foreground">
-            Explore all AgriConnect features and services
+            Explore all SokoConnect features and services
           </p>
         </div>
 

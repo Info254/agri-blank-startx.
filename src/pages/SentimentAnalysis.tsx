@@ -8,7 +8,7 @@ import SentimentInsights from "@/components/SentimentInsights";
 
 const SentimentAnalysis = () => {
   useEffect(() => {
-    document.title = "Agricultural Sentiment Analysis | AgriConnect";
+    document.title = "Agricultural Sentiment Analysis | SokoConnect";
   }, []);
 
   return (

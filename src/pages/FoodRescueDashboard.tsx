@@ -143,13 +143,50 @@ export default function FoodRescueDashboard({ user }: any) {
     <div className="min-h-screen pb-20 lg:pb-0">
       <MobileHeader title="Food Rescue" />
       
-      <main className="py-6 px-4 max-w-7xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl md:text-3xl font-bold mb-2 flex items-center gap-2">
-            <Heart className="h-8 w-8 text-red-500" />
-            Food Rescue Dashboard
+      {/* Hero Section with Background */}
+      <section className="relative h-[300px] bg-gradient-to-br from-red-600 via-red-500 to-orange-600 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h1 className="text-4xl font-bold text-white mb-4 drop-shadow-lg flex items-center justify-center gap-3">
+            <Heart className="h-10 w-10" fill="white" />
+            Food Rescue Network
           </h1>
-          <p className="text-muted-foreground">Connecting surplus food with those in need</p>
+          <p className="text-xl text-white font-medium drop-shadow-md max-w-2xl mx-auto">
+            Connecting surplus food with those in need - Zero waste, Maximum impact
+          </p>
+        </div>
+      </section>
+      
+      <main className="py-6 px-4 max-w-7xl mx-auto">
+        {/* Value Proposition Cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-8 -mt-12 relative z-10">
+          <Card className="bg-card/95 backdrop-blur shadow-lg">
+            <CardContent className="pt-6 text-center">
+              <div className="mx-auto w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-3">
+                <Package className="h-6 w-6 text-green-600" />
+              </div>
+              <h3 className="font-semibold mb-2">For Farmers</h3>
+              <p className="text-sm text-muted-foreground">Donate surplus produce, reduce waste, get tax benefits</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-card/95 backdrop-blur shadow-lg">
+            <CardContent className="pt-6 text-center">
+              <div className="mx-auto w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-3">
+                <Users className="h-6 w-6 text-blue-600" />
+              </div>
+              <h3 className="font-semibold mb-2">For Organizations</h3>
+              <p className="text-sm text-muted-foreground">Access fresh food for schools, hospitals, and communities</p>
+            </CardContent>
+          </Card>
+          <Card className="bg-card/95 backdrop-blur shadow-lg">
+            <CardContent className="pt-6 text-center">
+              <div className="mx-auto w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center mb-3">
+                <Heart className="h-6 w-6 text-orange-600" />
+              </div>
+              <h3 className="font-semibold mb-2">Impact</h3>
+              <p className="text-sm text-muted-foreground">Combat hunger, reduce environmental impact</p>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">

@@ -56,7 +56,7 @@ export const PWAInstallPrompt: React.FC = () => {
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg flex items-center gap-2">
             <Download className="h-5 w-5" />
-            Install AgriConnect
+            Install SokoConnect
           </CardTitle>
           <Button
             variant="ghost"

@@ -1,9 +1,9 @@
-# AgriConnect Database Schema Documentation
+# SokoConnect Database Schema Documentation
 
 ## 📊 Database Overview
 
 **Database Type:** PostgreSQL (via Supabase)  
-**Total Tables:** 45+  
+**Total Tables:** 50+  
 **Security:** Row-Level Security (RLS) enabled on all tables
 
 ---

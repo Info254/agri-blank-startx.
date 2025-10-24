@@ -277,7 +277,7 @@ export const MobilePermissions: React.FC = () => {
             Mobile App Permissions
           </CardTitle>
           <CardDescription>
-            AgriConnect needs certain permissions to provide you with the best mobile experience.
+            SokoConnect needs certain permissions to provide you with the best mobile experience.
             All permissions are used only for agricultural purposes and your data remains secure.
           </CardDescription>
         </CardHeader>
@@ -363,7 +363,7 @@ export const MobilePermissions: React.FC = () => {
                       You can grant these permissions by:
                     </p>
                     <ul className="text-sm text-red-600 space-y-1">
-                      <li>• Going to your device Settings → Apps → AgriConnect → Permissions</li>
+                      <li>• Going to your device Settings → Apps → SokoConnect → Permissions</li>
                       <li>• Or clearing the app data and trying again</li>
                       <li>• Or clicking the "Grant" button above to try again</li>
                     </ul>
@@ -382,7 +382,7 @@ export const MobilePermissions: React.FC = () => {
                     Mobile App Store Requirements
                   </h4>
                   <p className="text-sm text-blue-600">
-                    AgriConnect is designed to meet all requirements for Android Play Store and Apple App Store:
+                    SokoConnect is designed to meet all requirements for Android Play Store and Apple App Store:
                   </p>
                   <ul className="text-sm text-blue-600 mt-2 space-y-1">
                     <li>• All permissions have clear justifications and agricultural purposes</li>

@@ -25,7 +25,7 @@ export const BluetoothGuide: React.FC = () => {
               <div>
                 <h3 className="font-semibold">Enable Bluetooth</h3>
                 <p className="text-sm text-muted-foreground">
-                  Turn on Bluetooth in your device settings and allow AgriConnect to access Bluetooth
+                  Turn on Bluetooth in your device settings and allow SokoConnect to access Bluetooth
                 </p>
               </div>
             </div>
@@ -37,7 +37,7 @@ export const BluetoothGuide: React.FC = () => {
               <div>
                 <h3 className="font-semibold">Start Discovery</h3>
                 <p className="text-sm text-muted-foreground">
-                  The app automatically scans for nearby AgriConnect users within Bluetooth range (up to 100 meters)
+                  The app automatically scans for nearby SokoConnect users within Bluetooth range (up to 100 meters)
                 </p>
               </div>
             </div>
@@ -90,7 +90,7 @@ export const BluetoothGuide: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="secondary">Device Verification</Badge>
-                <span className="text-sm">Only verified AgriConnect devices can connect</span>
+                <span className="text-sm">Only verified SokoConnect devices can connect</span>
               </div>
             </div>
           </div>

@@ -24,7 +24,7 @@ const SearchResultsPage: React.FC = () => {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            Enter a search term to find products, farmers, or services in the AgriConnect platform.
+            Enter a search term to find products, farmers, or services in the SokoConnect platform.
           </p>
         </CardContent>
       </Card>

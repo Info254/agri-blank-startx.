@@ -12,7 +12,7 @@ const TermsOfServicePage: React.FC = () => {
         <CardHeader className="space-y-4">
           <div className="flex items-center space-x-2">
             <Scale className="h-8 w-8 text-blue-600" />
-            <CardTitle className="text-3xl">Terms of Service - AgriConnect</CardTitle>
+            <CardTitle className="text-3xl">Terms of Service - SokoConnect</CardTitle>
           </div>
           <div className="flex flex-wrap gap-2">
             <Badge variant="outline">Effective: January 1, 2024</Badge>
@@ -30,8 +30,8 @@ const TermsOfServicePage: React.FC = () => {
                 </p>
               </div>
               <SocialShare
-                title="AgriConnect Terms of Service"
-                text="AgriConnect is committed to transparent agricultural technology. Our Terms of Service outline our commitment to farmers, data protection, and open agriculture policies in Kenya."
+                title="SokoConnect Terms of Service"
+                text="SokoConnect is committed to transparent agricultural technology. Our Terms of Service outline our commitment to farmers, data protection, and open agriculture policies in Kenya."
                 size="sm"
               />
             </div>
