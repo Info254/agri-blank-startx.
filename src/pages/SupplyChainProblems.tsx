@@ -103,7 +103,7 @@ const SupplyChainProblems: React.FC = () => {
         </div>
 
         <div className="mt-16 bg-muted/30 p-6 rounded-lg">
-          <h2 className="text-2xl font-bold mb-4">How AgriTender Connect Addresses Supply Chain Challenges</h2>
+          <h2 className="text-2xl font-bold mb-4">How SokoConnect Addresses Supply Chain Challenges</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card>
               <CardHeader>
@@ -161,7 +161,7 @@ const SupplyChainProblems: React.FC = () => {
           <div className="bg-green-50 p-4 rounded-lg mb-6">
             <h3 className="font-medium text-green-900 mb-2">Platform Risk Disclaimer</h3>
             <p className="text-sm text-green-800">
-              AgriTender Connect provides technology solutions to facilitate agricultural connections and transactions. 
+              SokoConnect provides technology solutions to facilitate agricultural connections and transactions. 
               We do not manage farming operations, guarantee crop outcomes, or assume responsibility for agricultural 
               risks. Users make independent decisions regarding their farming and business activities.
             </p>

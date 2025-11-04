@@ -26,7 +26,7 @@ const TermsOfServicePage: React.FC = () => {
               <div>
                 <h3 className="font-semibold text-blue-900 mb-1">Share Our Terms</h3>
                 <p className="text-sm text-blue-800">
-                  Help other farmers understand AgriConnect's commitment to transparency and data protection.
+                  Help other farmers understand SokoConnect's commitment to transparency and data protection.
                 </p>
               </div>
               <SocialShare
@@ -43,7 +43,7 @@ const TermsOfServicePage: React.FC = () => {
               <div>
                 <h3 className="font-semibold text-red-900">Legal Agreement</h3>
                 <p className="text-sm text-red-800">
-                  These Terms of Service constitute a legally binding agreement between you and AgriConnect. 
+                  These Terms of Service constitute a legally binding agreement between you and SokoConnect. 
                   By accessing or using our platform, you agree to be bound by these terms and all applicable laws.
                 </p>
               </div>
@@ -60,14 +60,14 @@ const TermsOfServicePage: React.FC = () => {
             
             <div className="space-y-4">
               <p className="text-sm leading-relaxed">
-                By accessing, browsing, or using the AgriConnect platform (website, mobile application, or API services), 
+                By accessing, browsing, or using the SokoConnect platform (website, mobile application, or API services), 
                 you acknowledge that you have read, understood, and agree to be bound by these Terms of Service and our Privacy Policy.
               </p>
               
               <div className="p-4 border rounded-lg bg-blue-50">
                 <h3 className="font-semibold mb-2">Platform Scope</h3>
                 <p className="text-sm">
-                  AgriConnect is an agricultural technology platform that connects farmers, buyers, service providers, 
+                  SokoConnect is an agricultural technology platform that connects farmers, buyers, service providers, 
                   and other stakeholders in Kenya's agricultural ecosystem. We facilitate connections but do not 
                   control or guarantee the quality, legality, or availability of products or services offered by users.
                 </p>
@@ -79,7 +79,7 @@ const TermsOfServicePage: React.FC = () => {
                   User Eligibility
                 </h3>
                 <ul className="list-disc list-inside space-y-1 text-sm">
-                  <li>You must be at least 18 years old to use AgriConnect</li>
+                  <li>You must be at least 18 years old to use SokoConnect</li>
                   <li>You must have legal capacity to enter into binding agreements</li>
                   <li>You must comply with all applicable laws in Kenya and your jurisdiction</li>
                   <li>Business users must have proper registration and licensing as required by law</li>
@@ -100,7 +100,7 @@ const TermsOfServicePage: React.FC = () => {
               <div className="p-4 border rounded-lg bg-green-50">
                 <h3 className="font-semibold mb-2">Kenya Ministry of Agriculture Open Data Adherence</h3>
                 <p className="text-sm mb-3">
-                  AgriConnect fully adheres to the Kenya Ministry of Agriculture and Livestock Development's 
+                  SokoConnect fully adheres to the Kenya Ministry of Agriculture and Livestock Development's 
                   Open Data Policy, ensuring transparent, accessible, and responsible agricultural data sharing.
                 </p>
                 
@@ -220,7 +220,7 @@ const TermsOfServicePage: React.FC = () => {
               <div className="p-4 border rounded-lg bg-yellow-50">
                 <h3 className="font-semibold mb-2">Platform Role Disclaimer</h3>
                 <p className="text-sm mb-2">
-                  <strong>AgriConnect is a technology platform that facilitates connections.</strong> We do not:
+                  <strong>SokoConnect is a technology platform that facilitates connections.</strong> We do not:
                 </p>
                 <ul className="list-disc list-inside space-y-1 text-sm">
                   <li>Own, sell, or directly control any agricultural products or services</li>
@@ -267,7 +267,7 @@ const TermsOfServicePage: React.FC = () => {
               <div className="p-4 border rounded-lg bg-red-50">
                 <h3 className="font-semibold mb-2">Maximum Liability Cap</h3>
                 <p className="text-sm">
-                  <strong>AgriConnect's total liability to you for any claims arising from your use of the platform 
+                  <strong>SokoConnect's total liability to you for any claims arising from your use of the platform 
                   shall not exceed KES 50,000 or the amount you paid us in the 12 months preceding the claim, 
                   whichever is lower.</strong>
                 </p>
@@ -295,7 +295,7 @@ const TermsOfServicePage: React.FC = () => {
               <div className="p-4 border rounded-lg bg-blue-50">
                 <h3 className="font-semibold mb-2">User Indemnification</h3>
                 <p className="text-sm">
-                  You agree to indemnify and hold AgriConnect harmless from any claims, damages, or expenses 
+                  You agree to indemnify and hold SokoConnect harmless from any claims, damages, or expenses 
                   arising from your use of the platform, violation of these terms, or infringement of third-party rights.
                 </p>
               </div>
@@ -309,8 +309,8 @@ const TermsOfServicePage: React.FC = () => {
             
             <div className="space-y-4">
               <div className="p-4 border rounded-lg">
-                <h3 className="font-semibold mb-2">AgriConnect Intellectual Property</h3>
-                <p className="text-sm mb-2">All platform content, features, and functionality are owned by AgriConnect, including:</p>
+                <h3 className="font-semibold mb-2">SokoConnect Intellectual Property</h3>
+                <p className="text-sm mb-2">All platform content, features, and functionality are owned by SokoConnect, including:</p>
                 <ul className="list-disc list-inside space-y-1 text-sm">
                   <li>Software code, algorithms, and AI models</li>
                   <li>Trademarks, logos, and brand elements</li>
@@ -353,7 +353,7 @@ const TermsOfServicePage: React.FC = () => {
                 <p className="text-sm">
                   <strong>Users are solely responsible for their tax obligations.</strong> This includes:
                   income tax on sales, VAT where applicable, and proper record-keeping for tax authorities.
-                  AgriConnect provides transaction records but does not provide tax advice.
+                  SokoConnect provides transaction records but does not provide tax advice.
                 </p>
               </div>
 
@@ -378,9 +378,9 @@ const TermsOfServicePage: React.FC = () => {
                 <h3 className="font-semibold mb-2">Internal Resolution Process</h3>
                 <ol className="list-decimal list-inside space-y-1 text-sm">
                   <li><strong>Direct Communication:</strong> Users should first attempt to resolve disputes directly</li>
-                  <li><strong>Platform Mediation:</strong> AgriConnect can facilitate discussions if requested</li>
+                  <li><strong>Platform Mediation:</strong> SokoConnect can facilitate discussions if requested</li>
                   <li><strong>Documentation:</strong> Keep records of all communications and transactions</li>
-                  <li><strong>Support Escalation:</strong> Contact support@agriconnect.co.ke for assistance</li>
+                  <li><strong>Support Escalation:</strong> Contact support@sokoconnect.co.ke for assistance</li>
                 </ol>
               </div>
 
@@ -413,13 +413,13 @@ const TermsOfServicePage: React.FC = () => {
                 <p className="text-sm mb-2">You may terminate your account at any time by:</p>
                 <ul className="list-disc list-inside space-y-1 text-sm">
                   <li>Using the account deletion feature in your profile settings</li>
-                  <li>Contacting our support team at support@agriconnect.co.ke</li>
+                  <li>Contacting our support team at support@sokoconnect.co.ke</li>
                   <li>Data will be deleted according to our Privacy Policy retention schedule</li>
                 </ul>
               </div>
 
               <div className="p-4 border rounded-lg bg-red-50">
-                <h3 className="font-semibold mb-2">AgriConnect Termination Rights</h3>
+                <h3 className="font-semibold mb-2">SokoConnect Termination Rights</h3>
                 <p className="text-sm mb-2">We may suspend or terminate accounts for:</p>
                 <ul className="list-disc list-inside space-y-1 text-sm">
                   <li>Violation of these Terms of Service</li>
@@ -442,7 +442,7 @@ const TermsOfServicePage: React.FC = () => {
                   <CardTitle className="text-lg">Legal Department</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm space-y-1">
-                  <p><strong>Email:</strong> legal@agriconnect.co.ke</p>
+                  <p><strong>Email:</strong> legal@sokoconnect.co.ke</p>
                   <p><strong>Phone:</strong> +254 700 000 001</p>
                   <p><strong>Address:</strong> Nairobi, Kenya</p>
                   <p><strong>Response Time:</strong> 5-7 business days</p>
@@ -454,7 +454,7 @@ const TermsOfServicePage: React.FC = () => {
                   <CardTitle className="text-lg">Customer Support</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm space-y-1">
-                  <p><strong>Email:</strong> support@agriconnect.co.ke</p>
+                  <p><strong>Email:</strong> support@sokoconnect.co.ke</p>
                   <p><strong>Phone:</strong> +254 700 000 002</p>
                   <p><strong>Hours:</strong> 8 AM - 6 PM EAT, Mon-Fri</p>
                   <p><strong>Emergency:</strong> 24/7 for critical issues</p>
@@ -465,11 +465,11 @@ const TermsOfServicePage: React.FC = () => {
 
           <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg text-center">
             <p className="text-sm font-medium text-blue-900">
-              By using AgriConnect, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. 
-              These terms constitute the entire agreement between you and AgriConnect regarding the use of our platform.
+              By using SokoConnect, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. 
+              These terms constitute the entire agreement between you and SokoConnect regarding the use of our platform.
             </p>
             <p className="text-xs text-blue-700 mt-2">
-              For questions about these terms, please contact our legal department at legal@agriconnect.co.ke
+              For questions about these terms, please contact our legal department at legal@sokoconnect.co.ke
             </p>
           </div>
         </CardContent>
