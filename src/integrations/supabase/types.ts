@@ -50,6 +50,45 @@ export type Database = {
         }
         Relationships: []
       }
+      api_access_logs: {
+        Row: {
+          endpoint: string
+          id: string
+          ip_address: unknown
+          method: string
+          request_count: number | null
+          response_time_ms: number | null
+          status_code: number | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          endpoint: string
+          id?: string
+          ip_address?: unknown
+          method: string
+          request_count?: number | null
+          response_time_ms?: number | null
+          status_code?: number | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          endpoint?: string
+          id?: string
+          ip_address?: unknown
+          method?: string
+          request_count?: number | null
+          response_time_ms?: number | null
+          status_code?: number | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       bluetooth_connections: {
         Row: {
           connection_type: string
@@ -425,6 +464,38 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      community_post_reposts: {
+        Row: {
+          id: string
+          original_post_id: string | null
+          repost_caption: string | null
+          reposted_at: string | null
+          reposted_by: string | null
+        }
+        Insert: {
+          id?: string
+          original_post_id?: string | null
+          repost_caption?: string | null
+          reposted_at?: string | null
+          reposted_by?: string | null
+        }
+        Update: {
+          id?: string
+          original_post_id?: string | null
+          repost_caption?: string | null
+          reposted_at?: string | null
+          reposted_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_post_reposts_original_post_id_fkey"
+            columns: ["original_post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       community_post_shares: {
         Row: {

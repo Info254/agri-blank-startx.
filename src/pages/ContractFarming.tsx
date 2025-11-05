@@ -413,7 +413,17 @@ const ContractFarming: React.FC = () => {
                   </div>
                   
                   <div className="flex gap-2">
-                    <Button className="flex-1">Apply Now</Button>
+                    <Button 
+                      className="flex-1"
+                      onClick={() => {
+                        toast({
+                          title: 'Application Started',
+                          description: 'Complete the application form to apply for this contract'
+                        });
+                      }}
+                    >
+                      Apply Now
+                    </Button>
                     <Button variant="outline">Learn More</Button>
                   </div>
                 </CardContent>

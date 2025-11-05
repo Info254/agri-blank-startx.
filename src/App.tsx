@@ -98,6 +98,8 @@ import ApiManagement from './pages/ApiManagement';
 import FAQSupport from './pages/FAQSupport';
 import Jobs from './pages/Jobs';
 import FoodRescueHeroes from './pages/FoodRescueHeroes';
+import CommunityFarming from './pages/CommunityFarming';
+import RouteBasedMarkets from './pages/RouteBasedMarkets';
 
 function App() {
   return (
@@ -201,6 +203,8 @@ function App() {
           <Route path="/faq-support" element={<FAQSupport />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/food-rescue-heroes" element={<FoodRescueHeroes />} />
+          <Route path="/community-farming" element={<CommunityFarming />} />
+          <Route path="/route-based-markets" element={<RouteBasedMarkets />} />
                    <Route path="*" element={<NotFound />} />
                </Routes>
               </React.Suspense>
