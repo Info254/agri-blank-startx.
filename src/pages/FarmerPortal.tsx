@@ -9,7 +9,6 @@ import FarmDashboard from '@/components/farm/FarmDashboard';
 import ProduceManagement from '@/components/farm/ProduceManagement';
 import LandManagement from '@/components/farm/LandManagement';
 import CropTracking from '@/components/farm/CropTracking';
-import InventoryManagement from '@/components/farm/InventoryManagement';
 import FinancialManagement from '@/components/farm/FinancialManagement';
 import AnalyticsDashboard from '@/components/farm/AnalyticsDashboard';
 import FarmerProductForm from '@/components/FarmerProductForm';
@@ -17,6 +16,10 @@ import { Produce } from '@/types/farmer';
 import AnimalManagement from '@/components/farm/AnimalManagement';
 import BuyRequestForm from '@/components/BuyRequestForm';
 import BuyRequestList from '@/components/BuyRequestList';
+import { FarmTasks } from '@/components/farm/FarmTasks';
+import { Animals } from '@/components/farm/Animals';
+import { Inventory } from '@/components/farm/Inventory';
+import { Budgets } from '@/components/farm/Budgets';
 
 const FarmerPortal: React.FC = () => {
   const navigate = useNavigate();
@@ -91,21 +94,27 @@ const FarmerPortal: React.FC = () => {
           <div className="overflow-x-auto scrollbar-hide">
             <TabsList className="flex w-max min-w-full space-x-2 px-1">
               <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+              <TabsTrigger value="tasks">Tasks</TabsTrigger>
               <TabsTrigger value="parcels">Land Parcels</TabsTrigger>
               <TabsTrigger value="crops">Crops</TabsTrigger>
               <TabsTrigger value="animals">Animals</TabsTrigger>
               <TabsTrigger value="inventory">Inventory</TabsTrigger>
+              <TabsTrigger value="budgets">Budgets</TabsTrigger>
               <TabsTrigger value="finances">Finances</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="products">My Products</TabsTrigger>
-            <TabsTrigger value="buy-requests">Buy Requests</TabsTrigger>
-            <TabsTrigger value="add-buy-request">Post Buy Request</TabsTrigger>
-            <TabsTrigger value="add-product">Add Product</TabsTrigger>
+              <TabsTrigger value="products">My Products</TabsTrigger>
+              <TabsTrigger value="buy-requests">Buy Requests</TabsTrigger>
+              <TabsTrigger value="add-buy-request">Post Buy Request</TabsTrigger>
+              <TabsTrigger value="add-product">Add Product</TabsTrigger>
             </TabsList>
           </div>
 
           <TabsContent value="dashboard">
             <FarmDashboard />
+          </TabsContent>
+
+          <TabsContent value="tasks">
+            <FarmTasks />
           </TabsContent>
 
           <TabsContent value="parcels">
@@ -117,12 +126,15 @@ const FarmerPortal: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="animals">
-            {/* Animal management CRUD UI */}
-            <AnimalManagement userId={user?.id} />
+            <Animals />
           </TabsContent>
 
           <TabsContent value="inventory">
-            <InventoryManagement />
+            <Inventory />
+          </TabsContent>
+
+          <TabsContent value="budgets">
+            <Budgets />
           </TabsContent>
 
           <TabsContent value="finances">
