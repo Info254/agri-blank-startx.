@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_referrals: {
+        Row: {
+          commission_amount: number | null
+          commission_paid: boolean | null
+          conversion_status: string | null
+          converted_at: string | null
+          created_at: string
+          id: string
+          referral_code: string
+          referred_user_id: string | null
+          referrer_user_id: string
+        }
+        Insert: {
+          commission_amount?: number | null
+          commission_paid?: boolean | null
+          conversion_status?: string | null
+          converted_at?: string | null
+          created_at?: string
+          id?: string
+          referral_code: string
+          referred_user_id?: string | null
+          referrer_user_id: string
+        }
+        Update: {
+          commission_amount?: number | null
+          commission_paid?: boolean | null
+          conversion_status?: string | null
+          converted_at?: string | null
+          created_at?: string
+          id?: string
+          referral_code?: string
+          referred_user_id?: string | null
+          referrer_user_id?: string
+        }
+        Relationships: []
+      }
       animals: {
         Row: {
           birth_date: string | null
@@ -88,6 +124,369 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      api_audit_trails: {
+        Row: {
+          action_type: string
+          created_at: string
+          id: string
+          ip_address: string | null
+          new_values: Json | null
+          old_values: Json | null
+          resource_id: string | null
+          resource_type: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          resource_id?: string | null
+          resource_type: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          new_values?: Json | null
+          old_values?: Json | null
+          resource_id?: string | null
+          resource_type?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      api_billing_records: {
+        Row: {
+          amount_due: number
+          amount_paid: number | null
+          api_key_id: string | null
+          billable_calls: number
+          billing_period_end: string
+          billing_period_start: string
+          created_at: string
+          id: string
+          invoice_number: string | null
+          payment_status: string | null
+          total_api_calls: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_due?: number
+          amount_paid?: number | null
+          api_key_id?: string | null
+          billable_calls?: number
+          billing_period_end: string
+          billing_period_start: string
+          created_at?: string
+          id?: string
+          invoice_number?: string | null
+          payment_status?: string | null
+          total_api_calls?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_due?: number
+          amount_paid?: number | null
+          api_key_id?: string | null
+          billable_calls?: number
+          billing_period_end?: string
+          billing_period_start?: string
+          created_at?: string
+          id?: string
+          invoice_number?: string | null
+          payment_status?: string | null
+          total_api_calls?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_billing_records_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_docs: {
+        Row: {
+          author_id: string | null
+          category: string | null
+          content: string
+          created_at: string
+          endpoint_id: string | null
+          id: string
+          is_published: boolean | null
+          order_index: number | null
+          title: string
+          updated_at: string
+          version: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          category?: string | null
+          content: string
+          created_at?: string
+          endpoint_id?: string | null
+          id?: string
+          is_published?: boolean | null
+          order_index?: number | null
+          title: string
+          updated_at?: string
+          version?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          category?: string | null
+          content?: string
+          created_at?: string
+          endpoint_id?: string | null
+          id?: string
+          is_published?: boolean | null
+          order_index?: number | null
+          title?: string
+          updated_at?: string
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_docs_endpoint_id_fkey"
+            columns: ["endpoint_id"]
+            isOneToOne: false
+            referencedRelation: "api_endpoints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      api_endpoints: {
+        Row: {
+          created_at: string
+          description: string | null
+          documentation_url: string | null
+          endpoint_path: string
+          example_request: Json | null
+          example_response: Json | null
+          id: string
+          is_active: boolean | null
+          method: string
+          parameters: Json | null
+          required_tier: string | null
+          updated_at: string
+          version: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          documentation_url?: string | null
+          endpoint_path: string
+          example_request?: Json | null
+          example_response?: Json | null
+          id?: string
+          is_active?: boolean | null
+          method: string
+          parameters?: Json | null
+          required_tier?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          documentation_url?: string | null
+          endpoint_path?: string
+          example_request?: Json | null
+          example_response?: Json | null
+          id?: string
+          is_active?: boolean | null
+          method?: string
+          parameters?: Json | null
+          required_tier?: string | null
+          updated_at?: string
+          version?: string | null
+        }
+        Relationships: []
+      }
+      api_keys: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          key_hash: string
+          key_name: string
+          key_preview: string
+          last_used_at: string | null
+          monthly_request_limit: number | null
+          rate_limit_per_minute: number | null
+          tier: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash: string
+          key_name: string
+          key_preview: string
+          last_used_at?: string | null
+          monthly_request_limit?: number | null
+          rate_limit_per_minute?: number | null
+          tier?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash?: string
+          key_name?: string
+          key_preview?: string
+          last_used_at?: string | null
+          monthly_request_limit?: number | null
+          rate_limit_per_minute?: number | null
+          tier?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      api_pricing_plans: {
+        Row: {
+          created_at: string
+          features: Json | null
+          id: string
+          is_active: boolean | null
+          monthly_price: number
+          monthly_request_limit: number
+          plan_name: string
+          rate_limit_per_minute: number
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          monthly_price?: number
+          monthly_request_limit: number
+          plan_name: string
+          rate_limit_per_minute: number
+          tier: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          features?: Json | null
+          id?: string
+          is_active?: boolean | null
+          monthly_price?: number
+          monthly_request_limit?: number
+          plan_name?: string
+          rate_limit_per_minute?: number
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      api_response_times: {
+        Row: {
+          endpoint: string
+          id: string
+          method: string
+          response_time_ms: number
+          status_code: number
+          timestamp: string
+        }
+        Insert: {
+          endpoint: string
+          id?: string
+          method: string
+          response_time_ms: number
+          status_code: number
+          timestamp?: string
+        }
+        Update: {
+          endpoint?: string
+          id?: string
+          method?: string
+          response_time_ms?: number
+          status_code?: number
+          timestamp?: string
+        }
+        Relationships: []
+      }
+      api_usage_logs: {
+        Row: {
+          api_key_id: string | null
+          created_at: string
+          endpoint: string
+          error_message: string | null
+          id: string
+          ip_address: string | null
+          method: string
+          request_size_bytes: number | null
+          response_size_bytes: number | null
+          response_time_ms: number | null
+          status_code: number
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          api_key_id?: string | null
+          created_at?: string
+          endpoint: string
+          error_message?: string | null
+          id?: string
+          ip_address?: string | null
+          method: string
+          request_size_bytes?: number | null
+          response_size_bytes?: number | null
+          response_time_ms?: number | null
+          status_code: number
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          api_key_id?: string | null
+          created_at?: string
+          endpoint?: string
+          error_message?: string | null
+          id?: string
+          ip_address?: string | null
+          method?: string
+          request_size_bytes?: number | null
+          response_size_bytes?: number | null
+          response_time_ms?: number | null
+          status_code?: number
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_usage_logs_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       bluetooth_connections: {
         Row: {
@@ -611,6 +1010,54 @@ export type Database = {
         }
         Relationships: []
       }
+      data_sync_jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          job_name: string
+          metadata: Json | null
+          records_failed: number | null
+          records_processed: number | null
+          source_system: string
+          started_at: string | null
+          status: string | null
+          sync_type: string | null
+          target_system: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_name: string
+          metadata?: Json | null
+          records_failed?: number | null
+          records_processed?: number | null
+          source_system: string
+          started_at?: string | null
+          status?: string | null
+          sync_type?: string | null
+          target_system: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          job_name?: string
+          metadata?: Json | null
+          records_failed?: number | null
+          records_processed?: number | null
+          source_system?: string
+          started_at?: string | null
+          status?: string | null
+          sync_type?: string | null
+          target_system?: string
+        }
+        Relationships: []
+      }
       delivery_requests: {
         Row: {
           actual_cost: number | null
@@ -691,6 +1138,199 @@ export type Database = {
           },
         ]
       }
+      developer_accounts: {
+        Row: {
+          api_tier: string | null
+          company_name: string | null
+          company_registration: string | null
+          contact_email: string
+          contact_person: string
+          contact_phone: string | null
+          created_at: string
+          id: string
+          is_verified: boolean | null
+          total_api_calls: number | null
+          updated_at: string
+          user_id: string
+          verified_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          api_tier?: string | null
+          company_name?: string | null
+          company_registration?: string | null
+          contact_email: string
+          contact_person: string
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          is_verified?: boolean | null
+          total_api_calls?: number | null
+          updated_at?: string
+          user_id: string
+          verified_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          api_tier?: string | null
+          company_name?: string | null
+          company_registration?: string | null
+          contact_email?: string
+          contact_person?: string
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          is_verified?: boolean | null
+          total_api_calls?: number | null
+          updated_at?: string
+          user_id?: string
+          verified_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      developer_forum_posts: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          is_answered: boolean | null
+          is_pinned: boolean | null
+          parent_post_id: string | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+          upvotes: number | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          is_answered?: boolean | null
+          is_pinned?: boolean | null
+          parent_post_id?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          upvotes?: number | null
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_answered?: boolean | null
+          is_pinned?: boolean | null
+          parent_post_id?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+          upvotes?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_forum_posts_parent_post_id_fkey"
+            columns: ["parent_post_id"]
+            isOneToOne: false
+            referencedRelation: "developer_forum_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      developer_payments: {
+        Row: {
+          amount: number
+          billing_record_id: string | null
+          created_at: string
+          currency: string | null
+          id: string
+          payment_date: string
+          payment_method: string | null
+          payment_status: string | null
+          transaction_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          billing_record_id?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          payment_date?: string
+          payment_method?: string | null
+          payment_status?: string | null
+          transaction_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          billing_record_id?: string | null
+          created_at?: string
+          currency?: string | null
+          id?: string
+          payment_date?: string
+          payment_method?: string | null
+          payment_status?: string | null
+          transaction_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "developer_payments_billing_record_id_fkey"
+            columns: ["billing_record_id"]
+            isOneToOne: false
+            referencedRelation: "api_billing_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      developer_tickets: {
+        Row: {
+          assigned_to: string | null
+          category: string | null
+          created_at: string
+          description: string
+          id: string
+          priority: string | null
+          resolved_at: string | null
+          status: string | null
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          category?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          priority?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          priority?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       equipment_marketplace: {
         Row: {
           available_for: string[] | null
@@ -741,6 +1381,62 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      error_logs: {
+        Row: {
+          api_key_id: string | null
+          created_at: string
+          endpoint: string | null
+          error_code: string | null
+          error_message: string
+          error_type: string
+          id: string
+          is_resolved: boolean | null
+          request_payload: Json | null
+          resolved_at: string | null
+          severity: string | null
+          stack_trace: string | null
+          user_id: string | null
+        }
+        Insert: {
+          api_key_id?: string | null
+          created_at?: string
+          endpoint?: string | null
+          error_code?: string | null
+          error_message: string
+          error_type: string
+          id?: string
+          is_resolved?: boolean | null
+          request_payload?: Json | null
+          resolved_at?: string | null
+          severity?: string | null
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          api_key_id?: string | null
+          created_at?: string
+          endpoint?: string | null
+          error_code?: string | null
+          error_message?: string
+          error_type?: string
+          id?: string
+          is_resolved?: boolean | null
+          request_payload?: Json | null
+          resolved_at?: string | null
+          severity?: string | null
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "error_logs_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       export_opportunities: {
         Row: {
@@ -1347,6 +2043,45 @@ export type Database = {
         }
         Relationships: []
       }
+      gdpr_requests: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          processed_at: string | null
+          processed_by: string | null
+          request_type: string
+          requested_data: Json | null
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          request_type: string
+          requested_data?: Json | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          request_type?: string
+          requested_data?: Json | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       input_group_order_participants: {
         Row: {
           id: string
@@ -1507,6 +2242,59 @@ export type Database = {
           unit?: string
         }
         Relationships: []
+      }
+      integration_partners: {
+        Row: {
+          api_key_id: string | null
+          contact_email: string
+          contact_phone: string | null
+          contract_end_date: string | null
+          contract_start_date: string | null
+          created_at: string
+          id: string
+          integration_status: string | null
+          notes: string | null
+          partner_name: string
+          partner_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          api_key_id?: string | null
+          contact_email: string
+          contact_phone?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
+          created_at?: string
+          id?: string
+          integration_status?: string | null
+          notes?: string | null
+          partner_name: string
+          partner_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          api_key_id?: string | null
+          contact_email?: string
+          contact_phone?: string | null
+          contract_end_date?: string | null
+          contract_start_date?: string | null
+          created_at?: string
+          id?: string
+          integration_status?: string | null
+          notes?: string | null
+          partner_name?: string
+          partner_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_partners_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       inventory_items: {
         Row: {
@@ -1861,6 +2649,45 @@ export type Database = {
         }
         Relationships: []
       }
+      oauth_clients: {
+        Row: {
+          allowed_scopes: string[] | null
+          client_id: string
+          client_name: string
+          client_secret_hash: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          redirect_uris: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          allowed_scopes?: string[] | null
+          client_id: string
+          client_name: string
+          client_secret_hash: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          redirect_uris: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          allowed_scopes?: string[] | null
+          client_id?: string
+          client_name?: string
+          client_secret_hash?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          redirect_uris?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       organizations: {
         Row: {
           beneficiary_count: number | null
@@ -2142,6 +2969,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      rate_limit_logs: {
+        Row: {
+          api_key_id: string | null
+          created_at: string
+          current_count: number
+          endpoint: string
+          exceeded_by: number | null
+          id: string
+          ip_address: string | null
+          limit_type: string | null
+          limit_value: number
+          user_id: string | null
+        }
+        Insert: {
+          api_key_id?: string | null
+          created_at?: string
+          current_count: number
+          endpoint: string
+          exceeded_by?: number | null
+          id?: string
+          ip_address?: string | null
+          limit_type?: string | null
+          limit_value: number
+          user_id?: string | null
+        }
+        Update: {
+          api_key_id?: string | null
+          created_at?: string
+          current_count?: number
+          endpoint?: string
+          exceeded_by?: number | null
+          id?: string
+          ip_address?: string | null
+          limit_type?: string | null
+          limit_value?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rate_limit_logs_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reward_points: {
         Row: {
@@ -2852,6 +3726,48 @@ export type Database = {
           severity?: string | null
           start_date?: string
           type?: string
+        }
+        Relationships: []
+      }
+      webhooks: {
+        Row: {
+          created_at: string
+          event_types: string[]
+          failure_count: number | null
+          id: string
+          is_active: boolean | null
+          last_triggered_at: string | null
+          secret_key: string
+          success_count: number | null
+          updated_at: string
+          user_id: string
+          webhook_url: string
+        }
+        Insert: {
+          created_at?: string
+          event_types: string[]
+          failure_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          secret_key: string
+          success_count?: number | null
+          updated_at?: string
+          user_id: string
+          webhook_url: string
+        }
+        Update: {
+          created_at?: string
+          event_types?: string[]
+          failure_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          secret_key?: string
+          success_count?: number | null
+          updated_at?: string
+          user_id?: string
+          webhook_url?: string
         }
         Relationships: []
       }
