@@ -6,8 +6,8 @@
 
 export const APP_CONFIG = {
   // Application metadata
-  name: 'AgriTender Connect',
-  version: '2.0.0',
+  name: 'SokoConnect',
+  version: '3.0.0',
   description: 'Comprehensive Agricultural Platform for Kenya',
   
   // API Configuration

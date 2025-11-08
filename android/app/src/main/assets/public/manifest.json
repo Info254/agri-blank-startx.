@@ -1,7 +1,7 @@
 
 {
-  "name": "AgriConnect - Agricultural Platform",
-  "short_name": "AgriConnect",
+  "name": "SokoConnect - Agricultural Platform",
+  "short_name": "SokoConnect",
   "description": "Comprehensive agricultural platform with Bluetooth mesh networking",
   "version": "3.0.0",
   "start_url": "/",
