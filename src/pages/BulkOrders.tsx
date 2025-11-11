@@ -128,7 +128,12 @@ const BulkOrders: React.FC = () => {
             Join group purchases to get better prices on agricultural inputs and products. 
             Organize with other farmers in your area for maximum savings.
           </p>
-          <Button size="lg" variant="secondary" className="shadow-xl hover:shadow-2xl transition-shadow">
+          <Button 
+            size="lg" 
+            variant="secondary" 
+            className="shadow-xl hover:shadow-2xl transition-shadow"
+            onClick={() => toast({ title: 'Coming Soon', description: 'Bulk order creation feature is under development' })}
+          >
             <Plus className="h-4 w-4 mr-2" />
             Create Bulk Order
           </Button>

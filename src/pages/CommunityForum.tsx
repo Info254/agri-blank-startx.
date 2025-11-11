@@ -192,9 +192,18 @@ const CommunityForum: React.FC = () => {
             </CardHeader>
             <CardContent>
               <Button 
-                onClick={() => setShowCreateForm(true)} 
+                onClick={() => {
+                  if (!user) {
+                    toast({
+                      title: 'Authentication Required',
+                      description: 'Please sign in to start a discussion',
+                      variant: 'destructive'
+                    });
+                    return;
+                  }
+                  setShowCreateForm(true);
+                }} 
                 className="w-full bg-primary hover:bg-primary/90"
-                disabled={!user}
                 size="lg"
               >
                 <Plus className="h-5 w-5 mr-2" />

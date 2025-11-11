@@ -100,6 +100,8 @@ import Jobs from './pages/Jobs';
 import FoodRescueHeroes from './pages/FoodRescueHeroes';
 import CommunityFarming from './pages/CommunityFarming';
 import RouteBasedMarkets from './pages/RouteBasedMarkets';
+import BusinessMarketing from './pages/BusinessMarketing';
+import ExportMarketplace from './pages/ExportMarketplace';
 
 function App() {
   return (
@@ -202,10 +204,12 @@ function App() {
           <Route path="/api-management" element={<ApiManagement />} />
           <Route path="/faq-support" element={<FAQSupport />} />
           <Route path="/jobs" element={<Jobs />} />
-          <Route path="/food-rescue-heroes" element={<FoodRescueHeroes />} />
-          <Route path="/community-farming" element={<CommunityFarming />} />
-          <Route path="/route-based-markets" element={<RouteBasedMarkets />} />
-                   <Route path="*" element={<NotFound />} />
+           <Route path="/food-rescue-heroes" element={<FoodRescueHeroes />} />
+           <Route path="/community-farming" element={<CommunityFarming />} />
+           <Route path="/route-based-markets" element={<RouteBasedMarkets />} />
+           <Route path="/business-marketing" element={<BusinessMarketing />} />
+           <Route path="/export-marketplace" element={<ExportMarketplace />} />
+                    <Route path="*" element={<NotFound />} />
                </Routes>
               </React.Suspense>
               <Toaster />
