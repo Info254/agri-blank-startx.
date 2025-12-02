@@ -198,6 +198,7 @@ function App() {
                    <Route path="/equipment-marketplace-page" element={<EquipmentMarketplacePage />} />
           <Route path="/partners-showcase" element={<PartnersShowcase />} />
           <Route path="/major-routes" element={<MajorRoutesMarketplace />} />
+          <Route path="/major-routes-marketplace" element={<MajorRoutesMarketplace />} />
           <Route path="/major-routes-map" element={<MajorRoutesMapPage />} />
           <Route path="/f2c-marketplace" element={<F2CMarketplace />} />
           <Route path="/batch-tracking" element={<BatchTracking />} />
