@@ -72,7 +72,10 @@ const BarterExchange: React.FC = () => {
                 className="pl-10"
               />
             </div>
-            <Button>Post Barter Offer</Button>
+            <Button onClick={() => {
+              // TODO: Open barter offer form dialog
+              alert('Barter offer form will open here');
+            }}>Post Barter Offer</Button>
           </div>
         </div>
 
@@ -116,7 +119,9 @@ const BarterExchange: React.FC = () => {
                       <span>{listing.location}</span>
                     </div>
                   </div>
-                  <Button>Contact Farmer</Button>
+                  <Button onClick={() => {
+                    window.location.href = `tel:${listing.contact}`;
+                  }}>Contact Farmer</Button>
                 </div>
               </CardContent>
             </Card>
@@ -130,7 +135,10 @@ const BarterExchange: React.FC = () => {
               <p className="text-muted-foreground mb-4">
                 Try adjusting your search terms or be the first to post a barter offer!
               </p>
-              <Button>Post Your First Barter Offer</Button>
+              <Button onClick={() => {
+                // TODO: Open barter offer form dialog
+                alert('Barter offer form will open here');
+              }}>Post Your First Barter Offer</Button>
             </CardContent>
           </Card>
         )}
