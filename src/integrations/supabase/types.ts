@@ -1645,6 +1645,107 @@ export type Database = {
         }
         Relationships: []
       }
+      farm_input_order_items: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string
+          product_id: string | null
+          quantity: number
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id: string
+          product_id?: string | null
+          quantity?: number
+          total_price?: number
+          unit_price?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string
+          product_id?: string | null
+          quantity?: number
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farm_input_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "farm_input_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "farm_input_order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "farm_input_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      farm_input_orders: {
+        Row: {
+          buyer_id: string
+          buyer_name: string | null
+          buyer_phone: string | null
+          created_at: string
+          delivery_address: string | null
+          delivery_county: string | null
+          delivery_method: string | null
+          id: string
+          notes: string | null
+          status: string | null
+          supplier_id: string | null
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          buyer_id: string
+          buyer_name?: string | null
+          buyer_phone?: string | null
+          created_at?: string
+          delivery_address?: string | null
+          delivery_county?: string | null
+          delivery_method?: string | null
+          id?: string
+          notes?: string | null
+          status?: string | null
+          supplier_id?: string | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          buyer_id?: string
+          buyer_name?: string | null
+          buyer_phone?: string | null
+          created_at?: string
+          delivery_address?: string | null
+          delivery_county?: string | null
+          delivery_method?: string | null
+          id?: string
+          notes?: string | null
+          status?: string | null
+          supplier_id?: string | null
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farm_input_orders_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "farm_input_suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       farm_input_products: {
         Row: {
           availability_status: string | null
@@ -2754,6 +2855,84 @@ export type Database = {
           verification_documents?: Json | null
           verified_at?: string | null
           verified_by?: string | null
+        }
+        Relationships: []
+      }
+      partner_events: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_date: string | null
+          id: string
+          image_url: string | null
+          location: string | null
+          partner_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          partner_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          id?: string
+          image_url?: string | null
+          location?: string | null
+          partner_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      partners: {
+        Row: {
+          company_name: string
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_verified: boolean | null
+          logo_url: string | null
+          updated_at: string
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          company_name: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_verified?: boolean | null
+          logo_url?: string | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+        }
+        Update: {
+          company_name?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_verified?: boolean | null
+          logo_url?: string | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
         }
         Relationships: []
       }

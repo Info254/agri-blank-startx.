@@ -32,10 +32,19 @@ const PartnerEventsList: React.FC = () => {
     });
   }, []);
 
+  if (events.length === 0) {
+    return (
+      <div className="text-center py-8 border rounded-lg bg-muted/50">
+        <p className="text-muted-foreground">No events yet. Partner events will appear here once created.</p>
+        <p className="text-sm text-muted-foreground mt-2">Database has 0 partner events.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {events.map(event => (
-        <div key={event.id} className="border rounded-lg p-4 bg-white shadow">
+        <div key={event.id} className="border rounded-lg p-4 bg-card shadow">
           <h3 className="font-bold text-lg mb-1">{event.title}</h3>
           <div className="text-sm text-muted-foreground mb-2">{event.event_date} &bull; {event.location}</div>
           <p className="mb-2">{event.description}</p>

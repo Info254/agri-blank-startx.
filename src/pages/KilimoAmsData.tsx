@@ -6,9 +6,13 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { ExternalLink, Verified, AlertTriangle } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { ExternalLink, Verified, AlertTriangle, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import D3Visualizations from '@/components/analytics/D3Visualizations';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 import { 
   REAL_KENYAN_AGRICULTURAL_DATA, 
   LEGITIMATE_DATA_SOURCES, 
@@ -16,24 +20,95 @@ import {
   fetchRealKenyaData 
 } from '@/services/realDataService';
 
+interface MarketPrice {
+  id: string;
+  commodity: string;
+  market: string;
+  price: number;
+  unit: string;
+  date: string;
+  county: string;
+}
+
 const KilimoAmsData: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('real-data');
+  const [activeTab, setActiveTab] = useState('user-prices');
   const [realData, setRealData] = useState(REAL_KENYAN_AGRICULTURAL_DATA);
+  const [userPrices, setUserPrices] = useState<MarketPrice[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedCounty, setSelectedCounty] = useState('');
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const { user } = useAuth();
+
+  const [newPrice, setNewPrice] = useState({
+    commodity: '',
+    market: '',
+    price: '',
+    unit: 'per kg',
+    county: ''
+  });
 
   useEffect(() => {
-    const loadRealData = async () => {
-      try {
-        const data = await fetchRealKenyaData();
-        setRealData(data);
-      } catch (error) {
-        console.error('Error loading real data:', error);
-      }
-    };
-
+    fetchUserPrices();
     loadRealData();
   }, []);
+
+  const loadRealData = async () => {
+    try {
+      const data = await fetchRealKenyaData();
+      setRealData(data);
+    } catch (error) {
+      console.error('Error loading real data:', error);
+    }
+  };
+
+  const fetchUserPrices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('market_prices')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      setUserPrices(data || []);
+    } catch (error) {
+      console.error('Error fetching prices:', error);
+    }
+  };
+
+  const handleSubmitPrice = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) {
+      toast({ title: 'Please login to submit prices', variant: 'destructive' });
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      const { error } = await supabase
+        .from('market_prices')
+        .insert({
+          commodity: newPrice.commodity,
+          market: newPrice.market,
+          price: parseFloat(newPrice.price),
+          unit: newPrice.unit,
+          county: newPrice.county,
+          date: new Date().toISOString().split('T')[0]
+        });
+
+      if (error) throw error;
+      
+      toast({ title: 'Price submitted successfully!' });
+      setNewPrice({ commodity: '', market: '', price: '', unit: 'per kg', county: '' });
+      setShowAddForm(false);
+      fetchUserPrices();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Extract unique categories from real data
   const categories = [...new Set(realData.map(item => item.category))];
@@ -103,9 +178,115 @@ const KilimoAmsData: React.FC = () => {
               <CardContent>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="w-full mb-6">
+                    <TabsTrigger value="user-prices">User Prices ({userPrices.length})</TabsTrigger>
                     <TabsTrigger value="real-data">Verified Data</TabsTrigger>
                     <TabsTrigger value="sources">Data Sources</TabsTrigger>
                   </TabsList>
+
+                  <TabsContent value="user-prices">
+                    <div className="mb-4 flex justify-between items-center">
+                      <h3 className="font-medium">Prices Submitted by Users</h3>
+                      <Button onClick={() => setShowAddForm(!showAddForm)} size="sm">
+                        <Plus className="h-4 w-4 mr-2" /> Submit Price
+                      </Button>
+                    </div>
+
+                    {showAddForm && (
+                      <Card className="mb-4">
+                        <CardContent className="pt-4">
+                          <form onSubmit={handleSubmitPrice} className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label>Commodity</Label>
+                              <Input 
+                                value={newPrice.commodity}
+                                onChange={(e) => setNewPrice({...newPrice, commodity: e.target.value})}
+                                placeholder="e.g., Maize" required
+                              />
+                            </div>
+                            <div>
+                              <Label>Market</Label>
+                              <Input 
+                                value={newPrice.market}
+                                onChange={(e) => setNewPrice({...newPrice, market: e.target.value})}
+                                placeholder="e.g., Gikomba" required
+                              />
+                            </div>
+                            <div>
+                              <Label>Price (KES)</Label>
+                              <Input 
+                                type="number"
+                                value={newPrice.price}
+                                onChange={(e) => setNewPrice({...newPrice, price: e.target.value})}
+                                placeholder="e.g., 3500" required
+                              />
+                            </div>
+                            <div>
+                              <Label>Unit</Label>
+                              <Select value={newPrice.unit} onValueChange={(v) => setNewPrice({...newPrice, unit: v})}>
+                                <SelectTrigger><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="per kg">per kg</SelectItem>
+                                  <SelectItem value="per 90kg bag">per 90kg bag</SelectItem>
+                                  <SelectItem value="per crate">per crate</SelectItem>
+                                  <SelectItem value="per piece">per piece</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label>County</Label>
+                              <Select value={newPrice.county} onValueChange={(v) => setNewPrice({...newPrice, county: v})}>
+                                <SelectTrigger><SelectValue placeholder="Select county" /></SelectTrigger>
+                                <SelectContent>
+                                  {KENYAN_COUNTIES.map(c => (
+                                    <SelectItem key={c} value={c}>{c}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="flex items-end">
+                              <Button type="submit" disabled={loading}>
+                                {loading ? 'Submitting...' : 'Submit Price'}
+                              </Button>
+                            </div>
+                          </form>
+                        </CardContent>
+                      </Card>
+                    )}
+
+                    {userPrices.length === 0 ? (
+                      <div className="text-center py-8 border rounded bg-muted/50">
+                        <p className="text-muted-foreground">No prices submitted yet.</p>
+                        <p className="text-sm text-muted-foreground mt-1">Be the first to submit market prices!</p>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b">
+                              <th className="text-left p-2">Commodity</th>
+                              <th className="text-left p-2">Market</th>
+                              <th className="text-left p-2">County</th>
+                              <th className="text-right p-2">Price (KES)</th>
+                              <th className="text-left p-2">Unit</th>
+                              <th className="text-left p-2">Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {userPrices.map((item) => (
+                              <tr key={item.id} className="border-b hover:bg-muted/50">
+                                <td className="p-2 font-medium">{item.commodity}</td>
+                                <td className="p-2">{item.market}</td>
+                                <td className="p-2">{item.county}</td>
+                                <td className="p-2 text-right font-medium">{item.price}</td>
+                                <td className="p-2">{item.unit}</td>
+                                <td className="p-2 text-sm">{item.date}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </TabsContent>
 
                   <TabsContent value="real-data">
                     <div className="mb-6">

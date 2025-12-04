@@ -43,14 +43,29 @@ const FarmInputMarketplace: React.FC = () => {
           *,
           supplier:farm_input_suppliers (
             id,
-            supplier_name,
-            contact_phone
+            name,
+            phone
           )
-        `)
-        .eq('is_active', true);
+        `);
 
       if (error) throw error;
-      setProducts(data || []);
+      // Transform data to match expected format
+      const transformed = (data || []).map(item => ({
+        ...item,
+        product_name: item.name,
+        product_category: item.category,
+        product_description: item.description,
+        price_per_unit: item.price,
+        unit_of_measure: item.unit,
+        stock_quantity: 100, // Default if not in DB
+        brand_name: item.category,
+        supplier: item.supplier ? {
+          id: item.supplier.id,
+          supplier_name: item.supplier.name || 'Unknown Supplier',
+          contact_phone: item.supplier.phone || 'N/A'
+        } : { id: '', supplier_name: 'Unknown', contact_phone: 'N/A' }
+      }));
+      setProducts(transformed);
     } catch (error) {
       console.error('Error fetching products:', error);
       toast({
