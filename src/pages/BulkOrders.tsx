@@ -3,8 +3,12 @@ import Header from '@/components/Header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Users, 
   Package, 
@@ -17,6 +21,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface BulkOrder {
   id: string;
@@ -38,7 +43,20 @@ const BulkOrders: React.FC = () => {
   const [orders, setOrders] = useState<BulkOrder[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
+
+  const [newOrder, setNewOrder] = useState({
+    product_type: '',
+    quantity: '',
+    unit: 'kg',
+    max_price: '',
+    delivery_location: '',
+    delivery_date: '',
+    requirements: ''
+  });
 
   useEffect(() => {
     fetchBulkOrders();
@@ -64,6 +82,37 @@ const BulkOrders: React.FC = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreateOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) {
+      toast({ title: 'Please login to create orders', variant: 'destructive' });
+      return;
+    }
+    try {
+      setSubmitting(true);
+      const { error } = await supabase.from('bulk_orders').insert({
+        buyer_id: user.id,
+        product_type: newOrder.product_type,
+        quantity: parseFloat(newOrder.quantity),
+        unit: newOrder.unit,
+        max_price: newOrder.max_price ? parseFloat(newOrder.max_price) : null,
+        delivery_location: newOrder.delivery_location,
+        delivery_date: newOrder.delivery_date,
+        requirements: newOrder.requirements || null,
+        status: 'active'
+      });
+      if (error) throw error;
+      toast({ title: 'Bulk order created successfully!' });
+      setNewOrder({ product_type: '', quantity: '', unit: 'kg', max_price: '', delivery_location: '', delivery_date: '', requirements: '' });
+      setShowForm(false);
+      fetchBulkOrders();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -129,15 +178,62 @@ const BulkOrders: React.FC = () => {
             Join group purchases to get better prices on agricultural inputs and products. 
             Organize with other farmers in your area for maximum savings.
           </p>
-          <Button 
-            size="lg" 
-            variant="secondary" 
-            className="shadow-xl hover:shadow-2xl transition-shadow"
-            onClick={() => toast({ title: 'Coming Soon', description: 'Bulk order creation feature is under development' })}
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            Create Bulk Order
-          </Button>
+          <Dialog open={showForm} onOpenChange={setShowForm}>
+            <DialogTrigger asChild>
+              <Button size="lg" variant="secondary" className="shadow-xl hover:shadow-2xl transition-shadow">
+                <Plus className="h-4 w-4 mr-2" />
+                Create Bulk Order
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Create Bulk Order</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleCreateOrder} className="space-y-4">
+                <div>
+                  <Label>Product Type *</Label>
+                  <Input value={newOrder.product_type} onChange={(e) => setNewOrder({...newOrder, product_type: e.target.value})} placeholder="e.g., Fertilizer, Seeds" required />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Quantity *</Label>
+                    <Input type="number" value={newOrder.quantity} onChange={(e) => setNewOrder({...newOrder, quantity: e.target.value})} required />
+                  </div>
+                  <div>
+                    <Label>Unit</Label>
+                    <Select value={newOrder.unit} onValueChange={(v) => setNewOrder({...newOrder, unit: v})}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="kg">kg</SelectItem>
+                        <SelectItem value="bags">bags</SelectItem>
+                        <SelectItem value="litres">litres</SelectItem>
+                        <SelectItem value="pieces">pieces</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div>
+                  <Label>Max Price (KES)</Label>
+                  <Input type="number" value={newOrder.max_price} onChange={(e) => setNewOrder({...newOrder, max_price: e.target.value})} placeholder="Optional" />
+                </div>
+                <div>
+                  <Label>Delivery Location *</Label>
+                  <Input value={newOrder.delivery_location} onChange={(e) => setNewOrder({...newOrder, delivery_location: e.target.value})} placeholder="e.g., Nakuru, Kenya" required />
+                </div>
+                <div>
+                  <Label>Delivery Date *</Label>
+                  <Input type="date" value={newOrder.delivery_date} onChange={(e) => setNewOrder({...newOrder, delivery_date: e.target.value})} required />
+                </div>
+                <div>
+                  <Label>Requirements</Label>
+                  <Textarea value={newOrder.requirements} onChange={(e) => setNewOrder({...newOrder, requirements: e.target.value})} placeholder="Any specific requirements..." />
+                </div>
+                <Button type="submit" className="w-full" disabled={submitting}>
+                  {submitting ? 'Creating...' : 'Create Bulk Order'}
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
 
