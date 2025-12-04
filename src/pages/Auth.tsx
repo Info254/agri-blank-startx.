@@ -152,9 +152,12 @@ const Auth: React.FC = () => {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
               <img 
-                src="/src/assets/sokoconnect-logo.png" 
+                src="/sokoconnect-logo.png" 
                 alt="SokoConnect Logo" 
                 className="h-20 w-20"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
               />
             </div>
             <h1 className="text-4xl font-bold mb-2">

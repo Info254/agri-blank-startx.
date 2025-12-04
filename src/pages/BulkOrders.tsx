@@ -20,16 +20,16 @@ import { useToast } from '@/hooks/use-toast';
 
 interface BulkOrder {
   id: string;
-  organizer_id: string;
+  buyer_id: string;
   product_type: string;
   quantity: number;
   unit: string;
-  target_price: number;
-  deadline: string;
-  location: string;
-  description: string;
-  status: string;
-  current_participants: number;
+  max_price: number | null;
+  delivery_location: string;
+  delivery_date: string;
+  requirements: string | null;
+  status: string | null;
+  rating: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -85,19 +85,20 @@ const BulkOrders: React.FC = () => {
   };
 
   const filteredOrders = orders.filter(order =>
-    order.product_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    order.location.toLowerCase().includes(searchTerm.toLowerCase())
+    order.product_type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    order.delivery_location?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const calculateProgress = (order: BulkOrder) => {
-    const targetParticipants = Math.ceil(order.quantity / 100); // Assume 100 units per participant
-    return Math.min((order.current_participants / targetParticipants) * 100, 100);
+    // Simplified progress calculation
+    return Math.min((order.quantity / 1000) * 100, 100);
   };
 
-  const getDaysRemaining = (deadline: string) => {
-    const deadlineDate = new Date(deadline);
+  const getDaysRemaining = (deliveryDate: string | null) => {
+    if (!deliveryDate) return 0;
+    const date = new Date(deliveryDate);
     const today = new Date();
-    const diffTime = deadlineDate.getTime() - today.getTime();
+    const diffTime = date.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return Math.max(0, diffDays);
   };
@@ -192,7 +193,7 @@ const BulkOrders: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-6">
           {filteredOrders.map((order) => {
             const progress = calculateProgress(order);
-            const daysRemaining = getDaysRemaining(order.deadline);
+            const daysRemaining = getDaysRemaining(order.delivery_date);
             
             return (
               <Card key={order.id} className="hover:shadow-lg transition-shadow">
@@ -202,7 +203,7 @@ const BulkOrders: React.FC = () => {
                       <CardTitle className="text-xl mb-2">{order.product_type}</CardTitle>
                       <div className="flex items-center gap-2 mb-2">
                         <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-muted-foreground">{order.location}</span>
+                        <span className="text-muted-foreground">{order.delivery_location}</span>
                       </div>
                     </div>
                     <Badge variant={daysRemaining > 7 ? "default" : "destructive"}>
@@ -212,7 +213,7 @@ const BulkOrders: React.FC = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <p className="text-muted-foreground">{order.description}</p>
+                    <p className="text-muted-foreground">{order.requirements || 'No specific requirements'}</p>
                     
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
@@ -220,22 +221,22 @@ const BulkOrders: React.FC = () => {
                         <div className="font-medium">{order.quantity} {order.unit}</div>
                       </div>
                       <div>
-                        <div className="text-sm text-muted-foreground mb-1">Target Price</div>
-                        <div className="font-medium">KES {order.target_price}/{order.unit}</div>
+                        <div className="text-sm text-muted-foreground mb-1">Max Price</div>
+                        <div className="font-medium">KES {order.max_price || 'N/A'}/{order.unit}</div>
                       </div>
                     </div>
 
                     <div>
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm text-muted-foreground">Participants</span>
-                        <span className="text-sm font-medium">{order.current_participants} joined</span>
+                        <span className="text-sm text-muted-foreground">Progress</span>
+                        <span className="text-sm font-medium">{Math.round(progress)}%</span>
                       </div>
                       <Progress value={progress} className="h-2" />
                     </div>
 
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <Calendar className="h-4 w-4" />
-                      <span>Deadline: {new Date(order.deadline).toLocaleDateString()}</span>
+                      <span>Delivery: {order.delivery_date ? new Date(order.delivery_date).toLocaleDateString() : 'TBD'}</span>
                     </div>
 
                     <div className="pt-4 border-t flex gap-2">
