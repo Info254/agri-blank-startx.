@@ -26,16 +26,10 @@ const CommunityForum: React.FC = () => {
 
   const fetchPosts = async () => {
     try {
-      let query = (supabase as any)
+      let query = supabase
         .from('community_posts')
-        .select(`
-          *,
-          profiles:author_id (
-            full_name,
-            avatar_url
-          )
-        `)
-        .eq('status', 'active');
+        .select('*')
+        .eq('is_active', true);
 
       if (category !== 'all') {
         query = query.eq('category', category);
@@ -43,10 +37,10 @@ const CommunityForum: React.FC = () => {
 
       switch (sortBy) {
         case 'popular':
-          query = query.order('upvotes', { ascending: false });
+          query = query.order('likes_count', { ascending: false });
           break;
         case 'commented':
-          query = query.order('downvotes', { ascending: false });
+          query = query.order('comments_count', { ascending: false });
           break;
         case 'oldest':
           query = query.order('created_at', { ascending: true });
@@ -83,14 +77,15 @@ const CommunityForum: React.FC = () => {
     }
 
     try {
-      const { data: post, error: postError } = await (supabase as any)
+      const { data: post, error: postError } = await supabase
         .from('community_posts')
         .insert({
-          author_id: user.id,
+          user_id: user.id,
           title: postData.title,
           content: postData.content,
           category: postData.category,
-          tags: postData.tags
+          tags: postData.tags || [],
+          location: postData.location || null
         })
         .select()
         .single();
@@ -249,7 +244,7 @@ const CommunityForum: React.FC = () => {
               </CardContent>
             </Card>
           ) : (
-            filteredPosts.map((post) => (
+          filteredPosts.map((post) => (
               <PostCard
                 key={post.id}
                 post={{
@@ -257,15 +252,15 @@ const CommunityForum: React.FC = () => {
                   title: post.title,
                   content: post.content,
                   author: {
-                    name: post.profiles?.full_name || 'Anonymous',
-                    avatar: post.profiles?.avatar_url,
+                    name: 'Community Member',
+                    avatar: undefined,
                     isVerified: false,
                   },
                   category: post.category,
                   tags: post.tags || [],
                   location: post.location,
-                  likes: post.upvotes || 0,
-                  comments: post.downvotes || 0,
+                  likes: post.likes_count || 0,
+                  comments: post.comments_count || 0,
                   createdAt: post.created_at,
                 }}
               />

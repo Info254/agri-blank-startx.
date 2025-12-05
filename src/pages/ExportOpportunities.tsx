@@ -7,36 +7,53 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Globe, Users, Calendar, MapPin, Package, TrendingUp, Info } from 'lucide-react';
+import { Globe, Users, Calendar, MapPin, Package, TrendingUp, Plus } from 'lucide-react';
 import { AppLayout } from '@/components/layout/AppLayout';
-import { getMarketLinkages, createMarketLinkage, applyToMarketLinkage } from '@/services/marketLinkageService';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+
+interface ExportOpportunity {
+  id: string;
+  opportunity_title: string;
+  commodity: string;
+  destination_country: string;
+  volume: number;
+  unit: string;
+  deadline: string;
+  price_range: string | null;
+  specifications: string | null;
+  certifications_required: string[] | null;
+  payment_terms: string | null;
+  delivery_terms: string | null;
+  contact_info: any;
+  status: string | null;
+  created_at: string;
+}
 
 const ExportOpportunities: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [opportunities, setOpportunities] = useState<any[]>([]);
+  const [opportunities, setOpportunities] = useState<ExportOpportunity[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCrop, setSelectedCrop] = useState('all');
-  const [selectedCounty, setSelectedCounty] = useState('all');
+  const [selectedCountry, setSelectedCountry] = useState('all');
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const [newOpportunity, setNewOpportunity] = useState({
-    title: '',
-    description: '',
-    crops_involved: '',
-    counties: '',
-    requirements: '',
-    benefits: '',
-    contact_info: '',
-    application_deadline: '',
-    start_date: '',
-    duration_months: '',
-    minimum_quantity: '',
+    opportunity_title: '',
+    commodity: '',
+    destination_country: '',
+    volume: '',
+    unit: 'kg',
+    deadline: '',
     price_range: '',
-    max_participants: ''
+    specifications: '',
+    certifications_required: '',
+    payment_terms: '',
+    delivery_terms: ''
   });
 
   useEffect(() => {
@@ -46,10 +63,13 @@ const ExportOpportunities: React.FC = () => {
   async function fetchOpportunities() {
     setLoading(true);
     try {
-      const data = await getMarketLinkages({ 
-        linkage_type: 'export_opportunity',
-        activeOnly: true 
-      });
+      const { data, error } = await supabase
+        .from('export_opportunities')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
       setOpportunities(data || []);
     } catch (error) {
       console.error('Error fetching export opportunities:', error);
@@ -63,15 +83,15 @@ const ExportOpportunities: React.FC = () => {
     }
   }
 
-  const crops = Array.from(new Set(opportunities.flatMap(o => o.crops_involved || [])));
-  const counties = Array.from(new Set(opportunities.flatMap(o => o.counties || [])));
+  const crops = Array.from(new Set(opportunities.map(o => o.commodity)));
+  const countries = Array.from(new Set(opportunities.map(o => o.destination_country)));
 
   const filteredOpportunities = opportunities.filter(o => {
-    const matchesSearch = o.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         o.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCrop = selectedCrop === 'all' || (o.crops_involved && o.crops_involved.includes(selectedCrop));
-    const matchesCounty = selectedCounty === 'all' || (o.counties && o.counties.includes(selectedCounty));
-    return matchesSearch && matchesCrop && matchesCounty;
+    const matchesSearch = o.opportunity_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         o.commodity.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCrop = selectedCrop === 'all' || o.commodity === selectedCrop;
+    const matchesCountry = selectedCountry === 'all' || o.destination_country === selectedCountry;
+    return matchesSearch && matchesCrop && matchesCountry;
   });
 
   const handleCreateOpportunity = async () => {
@@ -84,79 +104,46 @@ const ExportOpportunities: React.FC = () => {
       return;
     }
 
-    try {
-      await createMarketLinkage({
-        title: newOpportunity.title,
-        description: newOpportunity.description,
-        linkage_type: 'export_opportunity',
-        crops_involved: newOpportunity.crops_involved.split(',').map(c => c.trim()),
-        counties: newOpportunity.counties.split(',').map(c => c.trim()),
-        requirements: newOpportunity.requirements.split(',').map(r => r.trim()),
-        benefits: newOpportunity.benefits.split(',').map(b => b.trim()),
-        contact_info: newOpportunity.contact_info,
-        application_deadline: newOpportunity.application_deadline || undefined,
-        start_date: newOpportunity.start_date || undefined,
-        duration_months: newOpportunity.duration_months ? parseInt(newOpportunity.duration_months) : undefined,
-        minimum_quantity: newOpportunity.minimum_quantity ? parseFloat(newOpportunity.minimum_quantity) : undefined,
-        price_range: newOpportunity.price_range || undefined,
-        max_participants: newOpportunity.max_participants ? parseInt(newOpportunity.max_participants) : undefined
-      });
-
+    if (!newOpportunity.opportunity_title || !newOpportunity.commodity || !newOpportunity.destination_country || !newOpportunity.deadline) {
       toast({
-        title: 'Success',
-        description: 'Export opportunity created successfully'
-      });
-      
-      setIsCreateDialogOpen(false);
-      setNewOpportunity({
-        title: '',
-        description: '',
-        crops_involved: '',
-        counties: '',
-        requirements: '',
-        benefits: '',
-        contact_info: '',
-        application_deadline: '',
-        start_date: '',
-        duration_months: '',
-        minimum_quantity: '',
-        price_range: '',
-        max_participants: ''
-      });
-      
-      fetchOpportunities();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to create export opportunity',
-        variant: 'destructive'
-      });
-    }
-  };
-
-  const handleApply = async (linkageId: string) => {
-    if (!user) {
-      toast({
-        title: 'Authentication Required',
-        description: 'Please sign in to apply',
+        title: 'Missing Fields',
+        description: 'Please fill in all required fields',
         variant: 'destructive'
       });
       return;
     }
 
     try {
-      await applyToMarketLinkage(linkageId);
-      toast({
-        title: 'Success',
-        description: 'Application submitted successfully'
+      setSubmitting(true);
+      const { error } = await supabase.from('export_opportunities').insert({
+        created_by: user.id,
+        opportunity_title: newOpportunity.opportunity_title,
+        commodity: newOpportunity.commodity,
+        destination_country: newOpportunity.destination_country,
+        volume: parseFloat(newOpportunity.volume) || 0,
+        unit: newOpportunity.unit,
+        deadline: newOpportunity.deadline,
+        price_range: newOpportunity.price_range || null,
+        specifications: newOpportunity.specifications || null,
+        certifications_required: newOpportunity.certifications_required ? newOpportunity.certifications_required.split(',').map(c => c.trim()) : null,
+        payment_terms: newOpportunity.payment_terms || null,
+        delivery_terms: newOpportunity.delivery_terms || null,
+        status: 'active'
+      });
+
+      if (error) throw error;
+
+      toast({ title: 'Export opportunity created successfully!' });
+      setIsCreateDialogOpen(false);
+      setNewOpportunity({
+        opportunity_title: '', commodity: '', destination_country: '', volume: '', unit: 'kg',
+        deadline: '', price_range: '', specifications: '', certifications_required: '', payment_terms: '', delivery_terms: ''
       });
       fetchOpportunities();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Failed to submit application',
-        variant: 'destructive'
-      });
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -171,7 +158,7 @@ const ExportOpportunities: React.FC = () => {
               <div>
                 <CardTitle className="text-2xl">Export Market Opportunities</CardTitle>
                 <CardDescription className="mt-2 text-base">
-                  Connect with international buyers and grow your export business
+                  Connect with international buyers and access global markets
                 </CardDescription>
               </div>
             </div>
@@ -205,7 +192,7 @@ const ExportOpportunities: React.FC = () => {
         <div className="flex flex-col gap-4 mb-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <Input
-              placeholder="Search opportunities..."
+              placeholder="Search buyers..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               className="sm:w-64"
@@ -221,14 +208,14 @@ const ExportOpportunities: React.FC = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Select value={selectedCounty} onValueChange={setSelectedCounty}>
+            <Select value={selectedCountry} onValueChange={setSelectedCountry}>
               <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="All Counties" />
+                <SelectValue placeholder="All Countries" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Counties</SelectItem>
-                {counties.map(county => (
-                  <SelectItem key={county} value={county}>{county}</SelectItem>
+                <SelectItem value="all">All Countries</SelectItem>
+                {countries.map(country => (
+                  <SelectItem key={country} value={country}>{country}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -237,7 +224,7 @@ const ExportOpportunities: React.FC = () => {
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
             <DialogTrigger asChild>
               <Button className="w-full sm:w-auto">
-                <Globe className="mr-2 h-4 w-4" />
+                <Plus className="mr-2 h-4 w-4" />
                 Post Export Opportunity
               </Button>
             </DialogTrigger>
@@ -247,138 +234,108 @@ const ExportOpportunities: React.FC = () => {
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div>
-                  <Label htmlFor="title">Title *</Label>
+                  <Label>Title *</Label>
                   <Input
-                    id="title"
-                    value={newOpportunity.title}
-                    onChange={e => setNewOpportunity({...newOpportunity, title: e.target.value})}
+                    value={newOpportunity.opportunity_title}
+                    onChange={e => setNewOpportunity({...newOpportunity, opportunity_title: e.target.value})}
                     placeholder="e.g., Avocado Export to Europe"
                   />
                 </div>
-                <div>
-                  <Label htmlFor="description">Description *</Label>
-                  <Textarea
-                    id="description"
-                    value={newOpportunity.description}
-                    onChange={e => setNewOpportunity({...newOpportunity, description: e.target.value})}
-                    placeholder="Describe the export opportunity..."
-                    rows={4}
-                  />
-                </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="crops">Crops (comma separated) *</Label>
+                    <Label>Commodity *</Label>
                     <Input
-                      id="crops"
-                      value={newOpportunity.crops_involved}
-                      onChange={e => setNewOpportunity({...newOpportunity, crops_involved: e.target.value})}
-                      placeholder="Avocado, Mango, Pineapple"
+                      value={newOpportunity.commodity}
+                      onChange={e => setNewOpportunity({...newOpportunity, commodity: e.target.value})}
+                      placeholder="e.g., Avocado"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="counties">Counties (comma separated) *</Label>
+                    <Label>Destination Country *</Label>
                     <Input
-                      id="counties"
-                      value={newOpportunity.counties}
-                      onChange={e => setNewOpportunity({...newOpportunity, counties: e.target.value})}
-                      placeholder="Murang'a, Kiambu, Nairobi"
+                      value={newOpportunity.destination_country}
+                      onChange={e => setNewOpportunity({...newOpportunity, destination_country: e.target.value})}
+                      placeholder="e.g., Germany"
                     />
                   </div>
                 </div>
-                <div>
-                  <Label htmlFor="requirements">Requirements (comma separated) *</Label>
-                  <Input
-                    id="requirements"
-                    value={newOpportunity.requirements}
-                    onChange={e => setNewOpportunity({...newOpportunity, requirements: e.target.value})}
-                    placeholder="GlobalGAP, Organic certification"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="benefits">Benefits (comma separated) *</Label>
-                  <Input
-                    id="benefits"
-                    value={newOpportunity.benefits}
-                    onChange={e => setNewOpportunity({...newOpportunity, benefits: e.target.value})}
-                    placeholder="Premium prices, Training, Logistics support"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="minQuantity">Minimum Quantity (kg)</Label>
+                    <Label>Volume</Label>
                     <Input
-                      id="minQuantity"
                       type="number"
-                      value={newOpportunity.minimum_quantity}
-                      onChange={e => setNewOpportunity({...newOpportunity, minimum_quantity: e.target.value})}
+                      value={newOpportunity.volume}
+                      onChange={e => setNewOpportunity({...newOpportunity, volume: e.target.value})}
                       placeholder="1000"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="priceRange">Price Range (KES)</Label>
-                    <Input
-                      id="priceRange"
-                      value={newOpportunity.price_range}
-                      onChange={e => setNewOpportunity({...newOpportunity, price_range: e.target.value})}
-                      placeholder="80-120 per kg"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="duration">Duration (months)</Label>
-                    <Input
-                      id="duration"
-                      type="number"
-                      value={newOpportunity.duration_months}
-                      onChange={e => setNewOpportunity({...newOpportunity, duration_months: e.target.value})}
-                      placeholder="12"
-                    />
+                    <Label>Unit</Label>
+                    <Select value={newOpportunity.unit} onValueChange={v => setNewOpportunity({...newOpportunity, unit: v})}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="kg">kg</SelectItem>
+                        <SelectItem value="tons">tons</SelectItem>
+                        <SelectItem value="crates">crates</SelectItem>
+                        <SelectItem value="containers">containers</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div>
-                    <Label htmlFor="maxParticipants">Max Participants</Label>
+                    <Label>Deadline *</Label>
                     <Input
-                      id="maxParticipants"
-                      type="number"
-                      value={newOpportunity.max_participants}
-                      onChange={e => setNewOpportunity({...newOpportunity, max_participants: e.target.value})}
-                      placeholder="50"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="startDate">Start Date</Label>
-                    <Input
-                      id="startDate"
                       type="date"
-                      value={newOpportunity.start_date}
-                      onChange={e => setNewOpportunity({...newOpportunity, start_date: e.target.value})}
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="deadline">Application Deadline</Label>
-                    <Input
-                      id="deadline"
-                      type="date"
-                      value={newOpportunity.application_deadline}
-                      onChange={e => setNewOpportunity({...newOpportunity, application_deadline: e.target.value})}
+                      value={newOpportunity.deadline}
+                      onChange={e => setNewOpportunity({...newOpportunity, deadline: e.target.value})}
                     />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="contact">Contact Information *</Label>
+                  <Label>Price Range</Label>
                   <Input
-                    id="contact"
-                    value={newOpportunity.contact_info}
-                    onChange={e => setNewOpportunity({...newOpportunity, contact_info: e.target.value})}
-                    placeholder="Email and phone number"
+                    value={newOpportunity.price_range}
+                    onChange={e => setNewOpportunity({...newOpportunity, price_range: e.target.value})}
+                    placeholder="e.g., $2-3 per kg"
                   />
+                </div>
+                <div>
+                  <Label>Specifications</Label>
+                  <Textarea
+                    value={newOpportunity.specifications}
+                    onChange={e => setNewOpportunity({...newOpportunity, specifications: e.target.value})}
+                    placeholder="Quality requirements, size specifications..."
+                  />
+                </div>
+                <div>
+                  <Label>Certifications Required (comma separated)</Label>
+                  <Input
+                    value={newOpportunity.certifications_required}
+                    onChange={e => setNewOpportunity({...newOpportunity, certifications_required: e.target.value})}
+                    placeholder="GlobalGAP, Organic, HACCP"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Payment Terms</Label>
+                    <Input
+                      value={newOpportunity.payment_terms}
+                      onChange={e => setNewOpportunity({...newOpportunity, payment_terms: e.target.value})}
+                      placeholder="e.g., 50% advance, 50% on delivery"
+                    />
+                  </div>
+                  <div>
+                    <Label>Delivery Terms</Label>
+                    <Input
+                      value={newOpportunity.delivery_terms}
+                      onChange={e => setNewOpportunity({...newOpportunity, delivery_terms: e.target.value})}
+                      placeholder="e.g., FOB Mombasa"
+                    />
+                  </div>
                 </div>
               </div>
               <DialogFooter>
-                <Button onClick={handleCreateOpportunity} className="w-full">
-                  Create Opportunity
+                <Button onClick={handleCreateOpportunity} className="w-full" disabled={submitting}>
+                  {submitting ? 'Creating...' : 'Create Opportunity'}
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -397,108 +354,62 @@ const ExportOpportunities: React.FC = () => {
               <Card key={opp.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-start justify-between flex-wrap gap-2">
-                    <CardTitle className="text-xl">{opp.title}</CardTitle>
+                    <CardTitle className="text-xl">{opp.opportunity_title}</CardTitle>
                     <div className="flex gap-2 flex-wrap">
-                      {opp.application_deadline && (
-                        <Badge variant="outline">
-                          <Calendar className="mr-1 h-3 w-3" />
-                          Deadline: {new Date(opp.application_deadline).toLocaleDateString()}
-                        </Badge>
-                      )}
-                      <Badge variant="default">
-                        {opp.participants_count || 0} / {opp.max_participants || '∞'} Applied
+                      <Badge variant="outline">
+                        <Calendar className="mr-1 h-3 w-3" />
+                        Deadline: {new Date(opp.deadline).toLocaleDateString()}
                       </Badge>
+                      <Badge variant="default">{opp.destination_country}</Badge>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <p className="text-muted-foreground">{opp.description}</p>
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Package className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">Crops:</span>
-                        <span className="text-muted-foreground">{opp.crops_involved?.join(', ')}</span>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <div className="text-sm text-muted-foreground">Commodity</div>
+                      <div className="font-medium flex items-center gap-1">
+                        <Package className="h-4 w-4" />
+                        {opp.commodity}
                       </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">Counties:</span>
-                        <span className="text-muted-foreground">{opp.counties?.join(', ')}</span>
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">Volume Required</div>
+                      <div className="font-medium">{opp.volume} {opp.unit}</div>
+                    </div>
+                    {opp.price_range && (
+                      <div>
+                        <div className="text-sm text-muted-foreground">Price Range</div>
+                        <div className="font-medium">{opp.price_range}</div>
                       </div>
-                      {opp.price_range && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">Price Range:</span>
-                          <span className="text-muted-foreground">KES {opp.price_range}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="space-y-2">
-                      {opp.minimum_quantity && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Package className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">Min Quantity:</span>
-                          <span className="text-muted-foreground">{opp.minimum_quantity} kg</span>
-                        </div>
-                      )}
-                      {opp.duration_months && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">Duration:</span>
-                          <span className="text-muted-foreground">{opp.duration_months} months</span>
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4 pt-2">
-                    <div>
-                      <h4 className="font-semibold mb-2 text-sm">Requirements</h4>
-                      <div className="flex flex-wrap gap-1">
-                        {opp.requirements?.map((req: string, idx: number) => (
-                          <Badge key={idx} variant="outline" className="text-xs">
-                            {req}
-                          </Badge>
-                        ))}
-                      </div>
+                  {opp.specifications && (
+                    <p className="text-muted-foreground">{opp.specifications}</p>
+                  )}
+
+                  {opp.certifications_required && opp.certifications_required.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {opp.certifications_required.map((cert, i) => (
+                        <Badge key={i} variant="secondary">{cert}</Badge>
+                      ))}
                     </div>
-                    <div>
-                      <h4 className="font-semibold mb-2 text-sm">Benefits</h4>
-                      <div className="flex flex-wrap gap-1">
-                        {opp.benefits?.map((benefit: string, idx: number) => (
-                          <Badge key={idx} variant="secondary" className="text-xs">
-                            {benefit}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-2 pt-2">
-                    <Button 
-                      onClick={() => handleApply(opp.id)} 
-                      className="flex-1"
-                      disabled={opp.max_participants && opp.participants_count >= opp.max_participants}
-                    >
-                      {opp.max_participants && opp.participants_count >= opp.max_participants ? 'Closed' : 'Apply Now'}
-                    </Button>
-                    <Button variant="outline">Contact</Button>
+                  )}
+
+                  <div className="flex gap-2 pt-4 border-t">
+                    <Button className="flex-1">Apply Now</Button>
+                    <Button variant="outline">View Details</Button>
                   </div>
                 </CardContent>
               </Card>
             ))
           ) : (
-            <Card>
-              <CardContent className="text-center py-12">
-                <Globe className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground mb-2">No export opportunities found</p>
-                <p className="text-sm text-muted-foreground">
-                  {searchTerm || selectedCrop !== 'all' || selectedCounty !== 'all' 
-                    ? 'Try adjusting your filters' 
-                    : 'Be the first to post an opportunity!'}
-                </p>
+            <Card className="text-center py-12">
+              <CardContent>
+                <Globe className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <h3 className="font-semibold mb-2">No export opportunities found.</h3>
+                <p className="text-muted-foreground">Try adjusting your filters or create a new opportunity.</p>
               </CardContent>
             </Card>
           )}

@@ -68,7 +68,7 @@ const BulkOrders: React.FC = () => {
       const { data, error } = await supabase
         .from('bulk_orders')
         .select('*')
-        .eq('status', 'active')
+        .eq('status', 'open')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -102,7 +102,7 @@ const BulkOrders: React.FC = () => {
         delivery_location: newOrder.delivery_location,
         delivery_date: newOrder.delivery_date,
         requirements: newOrder.requirements || null,
-        status: 'active'
+        status: 'open'
       });
       if (error) throw error;
       toast({ title: 'Bulk order created successfully!' });
