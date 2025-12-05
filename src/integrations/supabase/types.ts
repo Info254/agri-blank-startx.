@@ -488,6 +488,57 @@ export type Database = {
           },
         ]
       }
+      barter_offers: {
+        Row: {
+          county: string | null
+          created_at: string
+          description: string | null
+          id: string
+          location: string
+          offering_product: string
+          offering_quantity: number
+          offering_unit: string
+          seeking_product: string
+          seeking_quantity: number
+          seeking_unit: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          county?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          location: string
+          offering_product: string
+          offering_quantity: number
+          offering_unit?: string
+          seeking_product: string
+          seeking_quantity: number
+          seeking_unit?: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          county?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string
+          offering_product?: string
+          offering_quantity?: number
+          offering_unit?: string
+          seeking_product?: string
+          seeking_quantity?: number
+          seeking_unit?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bluetooth_connections: {
         Row: {
           connection_type: string
