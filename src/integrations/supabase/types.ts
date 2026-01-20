@@ -539,6 +539,116 @@ export type Database = {
         }
         Relationships: []
       }
+      batch_movements: {
+        Row: {
+          batch_id: string | null
+          created_at: string
+          from_location: string | null
+          id: string
+          moved_by: string | null
+          movement_type: string | null
+          notes: string | null
+          quantity: number | null
+          to_location: string | null
+        }
+        Insert: {
+          batch_id?: string | null
+          created_at?: string
+          from_location?: string | null
+          id?: string
+          moved_by?: string | null
+          movement_type?: string | null
+          notes?: string | null
+          quantity?: number | null
+          to_location?: string | null
+        }
+        Update: {
+          batch_id?: string | null
+          created_at?: string
+          from_location?: string | null
+          id?: string
+          moved_by?: string | null
+          movement_type?: string | null
+          notes?: string | null
+          quantity?: number | null
+          to_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "batch_movements_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "batch_tracking"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      batch_tracking: {
+        Row: {
+          batch_number: string
+          certifications: string[] | null
+          created_at: string
+          current_location: string | null
+          expiry_date: string | null
+          harvest_date: string | null
+          id: string
+          notes: string | null
+          origin_county: string | null
+          origin_farm: string | null
+          processing_date: string | null
+          product_category: string | null
+          product_name: string
+          quality_grade: string | null
+          quantity: number
+          status: string | null
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          batch_number: string
+          certifications?: string[] | null
+          created_at?: string
+          current_location?: string | null
+          expiry_date?: string | null
+          harvest_date?: string | null
+          id?: string
+          notes?: string | null
+          origin_county?: string | null
+          origin_farm?: string | null
+          processing_date?: string | null
+          product_category?: string | null
+          product_name: string
+          quality_grade?: string | null
+          quantity: number
+          status?: string | null
+          unit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          batch_number?: string
+          certifications?: string[] | null
+          created_at?: string
+          current_location?: string | null
+          expiry_date?: string | null
+          harvest_date?: string | null
+          id?: string
+          notes?: string | null
+          origin_county?: string | null
+          origin_farm?: string | null
+          processing_date?: string | null
+          product_category?: string | null
+          product_name?: string
+          quality_grade?: string | null
+          quantity?: number
+          status?: string | null
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bluetooth_connections: {
         Row: {
           connection_type: string
@@ -617,6 +727,57 @@ export type Database = {
           status?: string | null
           unit?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      buy_requests: {
+        Row: {
+          category: string | null
+          county: string | null
+          created_at: string
+          delivery_location: string | null
+          id: string
+          max_price: number | null
+          needed_by: string | null
+          notes: string | null
+          product_name: string
+          quantity_needed: number
+          status: string | null
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          county?: string | null
+          created_at?: string
+          delivery_location?: string | null
+          id?: string
+          max_price?: number | null
+          needed_by?: string | null
+          notes?: string | null
+          product_name: string
+          quantity_needed: number
+          status?: string | null
+          unit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          county?: string | null
+          created_at?: string
+          delivery_location?: string | null
+          id?: string
+          max_price?: number | null
+          needed_by?: string | null
+          notes?: string | null
+          product_name?: string
+          quantity_needed?: number
+          status?: string | null
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -1013,6 +1174,197 @@ export type Database = {
           title?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          phone: string | null
+          responded_at: string | null
+          responded_by: string | null
+          status: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          phone?: string | null
+          responded_at?: string | null
+          responded_by?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          phone?: string | null
+          responded_at?: string | null
+          responded_by?: string | null
+          status?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      contract_farming_agreements: {
+        Row: {
+          agreed_price: number
+          buyer_id: string
+          buyer_signed: boolean | null
+          contract_title: string
+          created_at: string
+          crop_type: string
+          delivery_location: string | null
+          end_date: string
+          farmer_id: string
+          farmer_signed: boolean | null
+          id: string
+          quantity: number
+          start_date: string
+          status: string | null
+          terms_conditions: string | null
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          agreed_price: number
+          buyer_id: string
+          buyer_signed?: boolean | null
+          contract_title: string
+          created_at?: string
+          crop_type: string
+          delivery_location?: string | null
+          end_date: string
+          farmer_id: string
+          farmer_signed?: boolean | null
+          id?: string
+          quantity: number
+          start_date: string
+          status?: string | null
+          terms_conditions?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agreed_price?: number
+          buyer_id?: string
+          buyer_signed?: boolean | null
+          contract_title?: string
+          created_at?: string
+          crop_type?: string
+          delivery_location?: string | null
+          end_date?: string
+          farmer_id?: string
+          farmer_signed?: boolean | null
+          id?: string
+          quantity?: number
+          start_date?: string
+          status?: string | null
+          terms_conditions?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cooperative_members: {
+        Row: {
+          cooperative_id: string | null
+          id: string
+          is_active: boolean | null
+          joined_at: string
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          cooperative_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          joined_at?: string
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          cooperative_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          joined_at?: string
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cooperative_members_cooperative_id_fkey"
+            columns: ["cooperative_id"]
+            isOneToOne: false
+            referencedRelation: "cooperatives"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cooperatives: {
+        Row: {
+          contact_email: string | null
+          contact_phone: string | null
+          county: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          established_date: string | null
+          focus_areas: string[] | null
+          id: string
+          is_active: boolean | null
+          is_verified: boolean | null
+          location: string | null
+          member_count: number | null
+          name: string
+          registration_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          county: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          established_date?: string | null
+          focus_areas?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          location?: string | null
+          member_count?: number | null
+          name: string
+          registration_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          established_date?: string | null
+          focus_areas?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          location?: string | null
+          member_count?: number | null
+          name?: string
+          registration_number?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -1657,6 +2009,39 @@ export type Database = {
         }
         Relationships: []
       }
+      faq_items: {
+        Row: {
+          answer: string
+          category: string | null
+          created_at: string
+          id: string
+          is_published: boolean | null
+          order_index: number | null
+          question: string
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_published?: boolean | null
+          order_index?: number | null
+          question: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_published?: boolean | null
+          order_index?: number | null
+          question?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       farm_budgets: {
         Row: {
           actual_amount: number | null
@@ -1961,6 +2346,116 @@ export type Database = {
         }
         Relationships: []
       }
+      farm_tourism_bookings: {
+        Row: {
+          booking_date: string
+          created_at: string
+          guests: number | null
+          id: string
+          listing_id: string | null
+          notes: string | null
+          status: string | null
+          total_amount: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          booking_date: string
+          created_at?: string
+          guests?: number | null
+          id?: string
+          listing_id?: string | null
+          notes?: string | null
+          status?: string | null
+          total_amount?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          booking_date?: string
+          created_at?: string
+          guests?: number | null
+          id?: string
+          listing_id?: string | null
+          notes?: string | null
+          status?: string | null
+          total_amount?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farm_tourism_bookings_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "farm_tourism_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      farm_tourism_listings: {
+        Row: {
+          activities: string[] | null
+          amenities: string[] | null
+          contact_email: string | null
+          contact_phone: string | null
+          county: string
+          created_at: string
+          description: string | null
+          farm_name: string
+          id: string
+          image_urls: string[] | null
+          is_active: boolean | null
+          location: string
+          max_guests: number | null
+          price_per_person: number | null
+          rating: number | null
+          total_bookings: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activities?: string[] | null
+          amenities?: string[] | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county: string
+          created_at?: string
+          description?: string | null
+          farm_name: string
+          id?: string
+          image_urls?: string[] | null
+          is_active?: boolean | null
+          location: string
+          max_guests?: number | null
+          price_per_person?: number | null
+          rating?: number | null
+          total_bookings?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activities?: string[] | null
+          amenities?: string[] | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string
+          created_at?: string
+          description?: string | null
+          farm_name?: string
+          id?: string
+          image_urls?: string[] | null
+          is_active?: boolean | null
+          location?: string
+          max_guests?: number | null
+          price_per_person?: number | null
+          rating?: number | null
+          total_bookings?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       farmer_exporter_collaborations: {
         Row: {
           availability_period: string | null
@@ -2066,6 +2561,77 @@ export type Database = {
         }
         Relationships: []
       }
+      farmer_network_members: {
+        Row: {
+          id: string
+          joined_at: string
+          network_id: string | null
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string
+          network_id?: string | null
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string
+          network_id?: string | null
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farmer_network_members_network_id_fkey"
+            columns: ["network_id"]
+            isOneToOne: false
+            referencedRelation: "farmer_networks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      farmer_networks: {
+        Row: {
+          county: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          focus_crop: string | null
+          id: string
+          is_active: boolean | null
+          member_count: number | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          county?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          focus_crop?: string | null
+          id?: string
+          is_active?: boolean | null
+          member_count?: number | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          county?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          focus_crop?: string | null
+          id?: string
+          is_active?: boolean | null
+          member_count?: number | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       farmer_protection_warnings: {
         Row: {
           created_at: string | null
@@ -2102,6 +2668,57 @@ export type Database = {
           target_audience?: string[] | null
           title?: string
           warning_type?: string
+        }
+        Relationships: []
+      }
+      farmer_success_stories: {
+        Row: {
+          achievement_type: string | null
+          county: string | null
+          created_at: string
+          crop_type: string | null
+          farmer_name: string
+          id: string
+          image_url: string | null
+          is_approved: boolean | null
+          is_featured: boolean | null
+          story: string
+          title: string
+          updated_at: string
+          user_id: string
+          views_count: number | null
+        }
+        Insert: {
+          achievement_type?: string | null
+          county?: string | null
+          created_at?: string
+          crop_type?: string | null
+          farmer_name: string
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          story: string
+          title: string
+          updated_at?: string
+          user_id: string
+          views_count?: number | null
+        }
+        Update: {
+          achievement_type?: string | null
+          county?: string | null
+          created_at?: string
+          crop_type?: string | null
+          farmer_name?: string
+          id?: string
+          image_url?: string | null
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          story?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views_count?: number | null
         }
         Relationships: []
       }
@@ -2229,6 +2846,63 @@ export type Database = {
           request_type?: string
           requested_data?: Json | null
           status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      imperfect_produce: {
+        Row: {
+          available_until: string | null
+          category: string | null
+          county: string
+          created_at: string
+          discount_percentage: number | null
+          discounted_price: number | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          original_price: number | null
+          product_name: string
+          quantity: number
+          reason: string | null
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          available_until?: string | null
+          category?: string | null
+          county: string
+          created_at?: string
+          discount_percentage?: number | null
+          discounted_price?: number | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          original_price?: number | null
+          product_name: string
+          quantity: number
+          reason?: string | null
+          unit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          available_until?: string | null
+          category?: string | null
+          county?: string
+          created_at?: string
+          discount_percentage?: number | null
+          discounted_price?: number | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          original_price?: number | null
+          product_name?: string
+          quantity?: number
+          reason?: string | null
+          unit?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -2768,6 +3442,42 @@ export type Database = {
         }
         Relationships: []
       }
+      market_suggestions: {
+        Row: {
+          contact_info: string | null
+          county: string
+          created_at: string
+          description: string | null
+          id: string
+          location: string | null
+          market_name: string
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          contact_info?: string | null
+          county: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          market_name: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          contact_info?: string | null
+          county?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          location?: string | null
+          market_name?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           action_url: string | null
@@ -3143,6 +3853,102 @@ export type Database = {
         }
         Relationships: []
       }
+      processing_facilities: {
+        Row: {
+          capacity: string | null
+          certifications: string[] | null
+          contact_email: string | null
+          contact_phone: string | null
+          county: string
+          created_at: string
+          facility_name: string
+          facility_type: string
+          id: string
+          is_active: boolean | null
+          is_verified: boolean | null
+          location: string | null
+          owner_id: string
+          products_processed: string[] | null
+          rating: number | null
+          updated_at: string
+        }
+        Insert: {
+          capacity?: string | null
+          certifications?: string[] | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county: string
+          created_at?: string
+          facility_name: string
+          facility_type: string
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          location?: string | null
+          owner_id: string
+          products_processed?: string[] | null
+          rating?: number | null
+          updated_at?: string
+        }
+        Update: {
+          capacity?: string | null
+          certifications?: string[] | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          county?: string
+          created_at?: string
+          facility_name?: string
+          facility_type?: string
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          location?: string | null
+          owner_id?: string
+          products_processed?: string[] | null
+          rating?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      product_reviews: {
+        Row: {
+          created_at: string
+          id: string
+          is_approved: boolean | null
+          is_verified_purchase: boolean | null
+          product_id: string
+          product_type: string
+          rating: number
+          review_text: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          is_verified_purchase?: boolean | null
+          product_id: string
+          product_type: string
+          rating: number
+          review_text?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          is_verified_purchase?: boolean | null
+          product_id?: string
+          product_type?: string
+          rating?: number
+          review_text?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -3200,6 +4006,51 @@ export type Database = {
         }
         Relationships: []
       }
+      quality_control_discussions: {
+        Row: {
+          category: string | null
+          content: string
+          county: string | null
+          created_at: string
+          id: string
+          is_resolved: boolean | null
+          product_type: string | null
+          replies_count: number | null
+          title: string
+          updated_at: string
+          user_id: string
+          views_count: number | null
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_resolved?: boolean | null
+          product_type?: string | null
+          replies_count?: number | null
+          title: string
+          updated_at?: string
+          user_id: string
+          views_count?: number | null
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_resolved?: boolean | null
+          product_type?: string | null
+          replies_count?: number | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       rate_limit_logs: {
         Row: {
           api_key_id: string | null
@@ -3247,6 +4098,158 @@ export type Database = {
           },
         ]
       }
+      recipes: {
+        Row: {
+          category: string | null
+          cook_time: number | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          ingredients: string[]
+          instructions: string
+          is_approved: boolean | null
+          likes_count: number | null
+          main_ingredient: string | null
+          prep_time: number | null
+          servings: number | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          cook_time?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          ingredients: string[]
+          instructions: string
+          is_approved?: boolean | null
+          likes_count?: number | null
+          main_ingredient?: string | null
+          prep_time?: number | null
+          servings?: number | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          cook_time?: number | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          ingredients?: string[]
+          instructions?: string
+          is_approved?: boolean | null
+          likes_count?: number | null
+          main_ingredient?: string | null
+          prep_time?: number | null
+          servings?: number | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reverse_auction_bids: {
+        Row: {
+          auction_id: string | null
+          bid_price: number
+          created_at: string
+          id: string
+          notes: string | null
+          seller_id: string
+          status: string | null
+        }
+        Insert: {
+          auction_id?: string | null
+          bid_price: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          seller_id: string
+          status?: string | null
+        }
+        Update: {
+          auction_id?: string | null
+          bid_price?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          seller_id?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reverse_auction_bids_auction_id_fkey"
+            columns: ["auction_id"]
+            isOneToOne: false
+            referencedRelation: "reverse_auctions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reverse_auctions: {
+        Row: {
+          buyer_id: string
+          category: string | null
+          county: string | null
+          created_at: string
+          delivery_date: string | null
+          delivery_location: string | null
+          end_time: string
+          id: string
+          max_price: number
+          product_name: string
+          quantity: number
+          requirements: string | null
+          status: string | null
+          unit: string | null
+          updated_at: string
+          winning_bid_id: string | null
+        }
+        Insert: {
+          buyer_id: string
+          category?: string | null
+          county?: string | null
+          created_at?: string
+          delivery_date?: string | null
+          delivery_location?: string | null
+          end_time: string
+          id?: string
+          max_price: number
+          product_name: string
+          quantity: number
+          requirements?: string | null
+          status?: string | null
+          unit?: string | null
+          updated_at?: string
+          winning_bid_id?: string | null
+        }
+        Update: {
+          buyer_id?: string
+          category?: string | null
+          county?: string | null
+          created_at?: string
+          delivery_date?: string | null
+          delivery_location?: string | null
+          end_time?: string
+          id?: string
+          max_price?: number
+          product_name?: string
+          quantity?: number
+          requirements?: string | null
+          status?: string | null
+          unit?: string | null
+          updated_at?: string
+          winning_bid_id?: string | null
+        }
+        Relationships: []
+      }
       reward_points: {
         Row: {
           activity_type: string
@@ -3274,6 +4277,104 @@ export type Database = {
           points?: number | null
           points_earned?: number
           user_id?: string
+        }
+        Relationships: []
+      }
+      road_market_products: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          is_available: boolean | null
+          market_id: string | null
+          price: number
+          product_name: string
+          quantity: number | null
+          seller_id: string
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_available?: boolean | null
+          market_id?: string | null
+          price: number
+          product_name: string
+          quantity?: number | null
+          seller_id: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          is_available?: boolean | null
+          market_id?: string | null
+          price?: number
+          product_name?: string
+          quantity?: number | null
+          seller_id?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "road_market_products_market_id_fkey"
+            columns: ["market_id"]
+            isOneToOne: false
+            referencedRelation: "road_markets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      road_markets: {
+        Row: {
+          contact_info: string | null
+          county: string
+          created_at: string
+          gps_coordinates: string | null
+          id: string
+          is_active: boolean | null
+          location: string | null
+          market_days: string[] | null
+          name: string
+          operating_hours: string | null
+          route_name: string
+          specialties: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          contact_info?: string | null
+          county: string
+          created_at?: string
+          gps_coordinates?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          market_days?: string[] | null
+          name: string
+          operating_hours?: string | null
+          route_name: string
+          specialties?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          contact_info?: string | null
+          county?: string
+          created_at?: string
+          gps_coordinates?: string | null
+          id?: string
+          is_active?: boolean | null
+          location?: string | null
+          market_days?: string[] | null
+          name?: string
+          operating_hours?: string | null
+          route_name?: string
+          specialties?: string[] | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -3388,6 +4489,39 @@ export type Database = {
         }
         Relationships: []
       }
+      service_provider_reviews: {
+        Row: {
+          created_at: string
+          id: string
+          is_approved: boolean | null
+          provider_id: string
+          rating: number
+          review_text: string | null
+          service_type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          provider_id: string
+          rating: number
+          review_text?: string | null
+          service_type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          provider_id?: string
+          rating?: number
+          review_text?: string | null
+          service_type?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       service_providers: {
         Row: {
           availability_status: string | null
@@ -3463,6 +4597,48 @@ export type Database = {
           updated_at?: string
           user_id?: string
           years_experience?: number | null
+        }
+        Relationships: []
+      }
+      stakeholder_profiles: {
+        Row: {
+          bio: string | null
+          counties_active: string[] | null
+          created_at: string
+          focus_areas: string[] | null
+          id: string
+          is_verified: boolean | null
+          organization_name: string | null
+          position: string | null
+          stakeholder_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bio?: string | null
+          counties_active?: string[] | null
+          created_at?: string
+          focus_areas?: string[] | null
+          id?: string
+          is_verified?: boolean | null
+          organization_name?: string | null
+          position?: string | null
+          stakeholder_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bio?: string | null
+          counties_active?: string[] | null
+          created_at?: string
+          focus_areas?: string[] | null
+          id?: string
+          is_verified?: boolean | null
+          organization_name?: string | null
+          position?: string | null
+          stakeholder_type?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -3792,6 +4968,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_bookmarks: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          item_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       warehouse_bookings: {
         Row: {
           contact_phone: string
@@ -3998,6 +5198,101 @@ export type Database = {
           updated_at?: string
           user_id?: string
           webhook_url?: string
+        }
+        Relationships: []
+      }
+      workshop_registrations: {
+        Row: {
+          id: string
+          registered_at: string
+          status: string | null
+          user_id: string
+          workshop_id: string | null
+        }
+        Insert: {
+          id?: string
+          registered_at?: string
+          status?: string | null
+          user_id: string
+          workshop_id?: string | null
+        }
+        Update: {
+          id?: string
+          registered_at?: string
+          status?: string | null
+          user_id?: string
+          workshop_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workshop_registrations_workshop_id_fkey"
+            columns: ["workshop_id"]
+            isOneToOne: false
+            referencedRelation: "workshops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workshops: {
+        Row: {
+          contact_email: string | null
+          contact_phone: string | null
+          cost: number | null
+          county: string
+          created_at: string
+          current_participants: number | null
+          description: string | null
+          end_date: string | null
+          id: string
+          is_active: boolean | null
+          is_free: boolean | null
+          location: string | null
+          max_participants: number | null
+          organizer_id: string
+          start_date: string
+          title: string
+          updated_at: string
+          workshop_type: string | null
+        }
+        Insert: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          cost?: number | null
+          county: string
+          created_at?: string
+          current_participants?: number | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_free?: boolean | null
+          location?: string | null
+          max_participants?: number | null
+          organizer_id: string
+          start_date: string
+          title: string
+          updated_at?: string
+          workshop_type?: string | null
+        }
+        Update: {
+          contact_email?: string | null
+          contact_phone?: string | null
+          cost?: number | null
+          county?: string
+          created_at?: string
+          current_participants?: number | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_free?: boolean | null
+          location?: string | null
+          max_participants?: number | null
+          organizer_id?: string
+          start_date?: string
+          title?: string
+          updated_at?: string
+          workshop_type?: string | null
         }
         Relationships: []
       }
