@@ -45,10 +45,29 @@ const BusinessMarketing: React.FC = () => {
       return;
     }
 
-    toast({
-      title: 'Success!',
-      description: 'Your business advertisement has been submitted. Feature coming soon!'
-    });
+    setLoading(true);
+    try {
+      const { error } = await supabase.from('business_advertisements').insert({
+        user_id: user.id,
+        business_name: formData.business_name,
+        business_description: formData.description,
+        business_category: formData.business_type,
+        contact_email: formData.contact_email,
+        contact_phone: formData.contact_phone,
+        location: formData.location,
+        ad_content: formData.services_offered || formData.description,
+        target_audience: formData.target_audience ? [formData.target_audience] : [],
+        is_active: false,
+        payment_status: 'pending'
+      });
+      if (error) throw error;
+      toast({ title: 'Success!', description: 'Your business advertisement has been submitted for review.' });
+      setFormData({ business_name: '', business_type: '', description: '', contact_phone: '', contact_email: '', location: '', county: '', services_offered: '', target_audience: '', website_url: '' });
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

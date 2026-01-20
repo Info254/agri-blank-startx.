@@ -4,6 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Briefcase, 
@@ -18,6 +21,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Job {
   id: string;
@@ -46,8 +50,25 @@ const Jobs: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedCounty, setSelectedCounty] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  const [newJob, setNewJob] = useState({
+    job_title: '',
+    job_description: '',
+    job_category: '',
+    location: '',
+    county: '',
+    salary_range: '',
+    employment_type: 'full_time',
+    contact_email: '',
+    contact_phone: '',
+    requirements: '',
+    application_deadline: ''
+  });
 
   useEffect(() => {
     fetchJobs();
@@ -73,6 +94,42 @@ const Jobs: React.FC = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleCreateJob = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user) {
+      toast({ title: 'Please log in to post a job', variant: 'destructive' });
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from('jobs').insert({
+        employer_id: user.id,
+        job_title: newJob.job_title,
+        job_description: newJob.job_description,
+        job_category: newJob.job_category,
+        location: newJob.location,
+        county: newJob.county,
+        salary_range: newJob.salary_range || null,
+        employment_type: newJob.employment_type,
+        contact_email: newJob.contact_email,
+        contact_phone: newJob.contact_phone || null,
+        requirements: newJob.requirements ? newJob.requirements.split(',').map(r => r.trim()) : [],
+        responsibilities: [],
+        application_deadline: newJob.application_deadline || null,
+        is_active: true
+      });
+      if (error) throw error;
+      toast({ title: 'Job posted successfully!' });
+      setNewJob({ job_title: '', job_description: '', job_category: '', location: '', county: '', salary_range: '', employment_type: 'full_time', contact_email: '', contact_phone: '', requirements: '', application_deadline: '' });
+      setShowForm(false);
+      fetchJobs();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -124,15 +181,92 @@ const Jobs: React.FC = () => {
           <p className="text-xl mb-8 max-w-3xl mx-auto opacity-95">
             Find opportunities in farming, agribusiness, and agricultural services across Kenya
           </p>
-          <Button size="lg" variant="secondary" className="shadow-xl" onClick={() => {
-            toast({
-              title: "Post a Job",
-              description: "Job posting feature coming soon!"
-            });
-          }}>
-            <Plus className="h-4 w-4 mr-2" />
-            Post a Job
-          </Button>
+          <Dialog open={showForm} onOpenChange={setShowForm}>
+            <DialogTrigger asChild>
+              <Button size="lg" variant="secondary" className="shadow-xl">
+                <Plus className="h-4 w-4 mr-2" />
+                Post a Job
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Post a New Job</DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleCreateJob} className="space-y-4">
+                <div>
+                  <Label>Job Title *</Label>
+                  <Input value={newJob.job_title} onChange={(e) => setNewJob({...newJob, job_title: e.target.value})} placeholder="e.g., Farm Manager" required />
+                </div>
+                <div>
+                  <Label>Job Description *</Label>
+                  <Textarea value={newJob.job_description} onChange={(e) => setNewJob({...newJob, job_description: e.target.value})} placeholder="Describe the role..." rows={3} required />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Category *</Label>
+                    <Select value={newJob.job_category} onValueChange={(val) => setNewJob({...newJob, job_category: val})}>
+                      <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Farming">Farming</SelectItem>
+                        <SelectItem value="Livestock">Livestock</SelectItem>
+                        <SelectItem value="Processing">Processing</SelectItem>
+                        <SelectItem value="Logistics">Logistics</SelectItem>
+                        <SelectItem value="Management">Management</SelectItem>
+                        <SelectItem value="Technical">Technical</SelectItem>
+                        <SelectItem value="Sales">Sales</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Employment Type</Label>
+                    <Select value={newJob.employment_type} onValueChange={(val) => setNewJob({...newJob, employment_type: val})}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="full_time">Full Time</SelectItem>
+                        <SelectItem value="part_time">Part Time</SelectItem>
+                        <SelectItem value="contract">Contract</SelectItem>
+                        <SelectItem value="seasonal">Seasonal</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Location *</Label>
+                    <Input value={newJob.location} onChange={(e) => setNewJob({...newJob, location: e.target.value})} placeholder="Town/City" required />
+                  </div>
+                  <div>
+                    <Label>County *</Label>
+                    <Input value={newJob.county} onChange={(e) => setNewJob({...newJob, county: e.target.value})} required />
+                  </div>
+                </div>
+                <div>
+                  <Label>Salary Range</Label>
+                  <Input value={newJob.salary_range} onChange={(e) => setNewJob({...newJob, salary_range: e.target.value})} placeholder="e.g., KES 30,000 - 50,000" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label>Contact Email *</Label>
+                    <Input type="email" value={newJob.contact_email} onChange={(e) => setNewJob({...newJob, contact_email: e.target.value})} required />
+                  </div>
+                  <div>
+                    <Label>Contact Phone</Label>
+                    <Input value={newJob.contact_phone} onChange={(e) => setNewJob({...newJob, contact_phone: e.target.value})} placeholder="+254..." />
+                  </div>
+                </div>
+                <div>
+                  <Label>Requirements (comma-separated)</Label>
+                  <Input value={newJob.requirements} onChange={(e) => setNewJob({...newJob, requirements: e.target.value})} placeholder="e.g., 2 years experience, Agriculture degree" />
+                </div>
+                <div>
+                  <Label>Application Deadline</Label>
+                  <Input type="date" value={newJob.application_deadline} onChange={(e) => setNewJob({...newJob, application_deadline: e.target.value})} />
+                </div>
+                <Button type="submit" className="w-full" disabled={submitting}>{submitting ? 'Posting...' : 'Post Job'}</Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </section>
 
