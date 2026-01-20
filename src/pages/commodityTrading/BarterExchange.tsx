@@ -1,55 +1,126 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Search, Users, MapPin, Calendar } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Search, Users, MapPin, Calendar, Plus, Trash2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
+
+interface BarterOffer {
+  id: string;
+  user_id: string;
+  offering_product: string;
+  offering_quantity: number;
+  offering_unit: string;
+  seeking_product: string;
+  seeking_quantity: number;
+  seeking_unit: string;
+  location: string;
+  county?: string;
+  description?: string;
+  status: string;
+  created_at: string;
+}
 
 const BarterExchange: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [offers, setOffers] = useState<BarterOffer[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const { toast } = useToast();
+  const { user } = useAuth();
+  
+  const [newOffer, setNewOffer] = useState({
+    offering_product: '',
+    offering_quantity: '',
+    offering_unit: 'kg',
+    seeking_product: '',
+    seeking_quantity: '',
+    seeking_unit: 'kg',
+    location: '',
+    county: '',
+    description: ''
+  });
 
-  const sampleBarterListings = [
-    {
-      id: '1',
-      title: 'Trade Maize for Fertilizer',
-      offeredItem: 'Maize - 10 bags (90kg each)',
-      requestedItem: 'NPK Fertilizer - 5 bags (50kg each)',
-      location: 'Nakuru County',
-      farmerName: 'John Maina',
-      contact: '+254 700 123456',
-      postedDate: '2024-01-15',
-      category: 'Grains'
-    },
-    {
-      id: '2',
-      title: 'Beans for Transport Services',
-      offeredItem: 'Green Beans - 20 bags (50kg each)',
-      requestedItem: 'Transport to Nairobi Market',
-      location: 'Meru County',
-      farmerName: 'Mary Wanjiku',
-      contact: '+254 701 234567',
-      postedDate: '2024-01-14',
-      category: 'Legumes'
-    },
-    {
-      id: '3',
-      title: 'Equipment Exchange',
-      offeredItem: 'Tractor Use - 2 days per month',
-      requestedItem: 'Harvester Use - 1 day',
-      location: 'Uasin Gishu County',
-      farmerName: 'Peter Kiprotich',
-      contact: '+254 702 345678',
-      postedDate: '2024-01-13',
-      category: 'Equipment'
+  useEffect(() => {
+    fetchOffers();
+  }, []);
+
+  async function fetchOffers() {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('barter_offers')
+        .select('*')
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      setOffers(data || []);
+    } catch (error) {
+      console.error('Error fetching barter offers:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  }
 
-  const filteredListings = sampleBarterListings.filter(listing =>
-    listing.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    listing.offeredItem.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    listing.requestedItem.toLowerCase().includes(searchTerm.toLowerCase())
+  async function handleCreateOffer(e: React.FormEvent) {
+    e.preventDefault();
+    if (!user) {
+      toast({ title: 'Please log in to create a barter offer', variant: 'destructive' });
+      return;
+    }
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.from('barter_offers').insert({
+        user_id: user.id,
+        offering_product: newOffer.offering_product,
+        offering_quantity: parseFloat(newOffer.offering_quantity),
+        offering_unit: newOffer.offering_unit,
+        seeking_product: newOffer.seeking_product,
+        seeking_quantity: parseFloat(newOffer.seeking_quantity),
+        seeking_unit: newOffer.seeking_unit,
+        location: newOffer.location,
+        county: newOffer.county || null,
+        description: newOffer.description || null,
+        status: 'active'
+      });
+      if (error) throw error;
+      toast({ title: 'Barter offer posted successfully!' });
+      setNewOffer({ offering_product: '', offering_quantity: '', offering_unit: 'kg', seeking_product: '', seeking_quantity: '', seeking_unit: 'kg', location: '', county: '', description: '' });
+      setShowForm(false);
+      fetchOffers();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function handleDeleteOffer(id: string) {
+    if (!confirm('Delete this barter offer?')) return;
+    try {
+      const { error } = await supabase.from('barter_offers').delete().eq('id', id);
+      if (error) throw error;
+      toast({ title: 'Offer deleted' });
+      fetchOffers();
+    } catch (error: any) {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    }
+  }
+
+  const filteredListings = offers.filter(offer =>
+    offer.offering_product.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    offer.seeking_product.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    offer.location.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -72,73 +143,140 @@ const BarterExchange: React.FC = () => {
                 className="pl-10"
               />
             </div>
-            <Button onClick={() => {
-              // TODO: Open barter offer form dialog
-              alert('Barter offer form will open here');
-            }}>Post Barter Offer</Button>
+            <Dialog open={showForm} onOpenChange={setShowForm}>
+              <DialogTrigger asChild>
+                <Button><Plus className="h-4 w-4 mr-2" />Post Barter Offer</Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Post Barter Offer</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleCreateOffer} className="space-y-4">
+                  <div>
+                    <Label>What are you offering? *</Label>
+                    <Input value={newOffer.offering_product} onChange={(e) => setNewOffer({...newOffer, offering_product: e.target.value})} placeholder="e.g., Maize, Beans, Tractor use" required />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label>Quantity *</Label>
+                      <Input type="number" value={newOffer.offering_quantity} onChange={(e) => setNewOffer({...newOffer, offering_quantity: e.target.value})} required />
+                    </div>
+                    <div>
+                      <Label>Unit</Label>
+                      <Select value={newOffer.offering_unit} onValueChange={(val) => setNewOffer({...newOffer, offering_unit: val})}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="kg">kg</SelectItem>
+                          <SelectItem value="bags">bags</SelectItem>
+                          <SelectItem value="tons">tons</SelectItem>
+                          <SelectItem value="days">days</SelectItem>
+                          <SelectItem value="units">units</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <Label>What are you seeking? *</Label>
+                    <Input value={newOffer.seeking_product} onChange={(e) => setNewOffer({...newOffer, seeking_product: e.target.value})} placeholder="e.g., Fertilizer, Transport" required />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <Label>Quantity *</Label>
+                      <Input type="number" value={newOffer.seeking_quantity} onChange={(e) => setNewOffer({...newOffer, seeking_quantity: e.target.value})} required />
+                    </div>
+                    <div>
+                      <Label>Unit</Label>
+                      <Select value={newOffer.seeking_unit} onValueChange={(val) => setNewOffer({...newOffer, seeking_unit: val})}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="kg">kg</SelectItem>
+                          <SelectItem value="bags">bags</SelectItem>
+                          <SelectItem value="tons">tons</SelectItem>
+                          <SelectItem value="days">days</SelectItem>
+                          <SelectItem value="units">units</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div>
+                    <Label>Location *</Label>
+                    <Input value={newOffer.location} onChange={(e) => setNewOffer({...newOffer, location: e.target.value})} placeholder="Town/Area" required />
+                  </div>
+                  <div>
+                    <Label>County</Label>
+                    <Input value={newOffer.county} onChange={(e) => setNewOffer({...newOffer, county: e.target.value})} placeholder="County name" />
+                  </div>
+                  <div>
+                    <Label>Additional Details</Label>
+                    <Textarea value={newOffer.description} onChange={(e) => setNewOffer({...newOffer, description: e.target.value})} placeholder="Any other information..." />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={submitting}>{submitting ? 'Posting...' : 'Post Offer'}</Button>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
-        <div className="grid gap-6">
-          {filteredListings.map((listing) => (
-            <Card key={listing.id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-xl mb-2">{listing.title}</CardTitle>
-                    <Badge variant="secondary">{listing.category}</Badge>
-                  </div>
-                  <div className="text-right text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
-                      {new Date(listing.postedDate).toLocaleDateString()}
+        {loading ? (
+          <div className="text-center py-12">Loading barter offers...</div>
+        ) : (
+          <div className="grid gap-6">
+            {filteredListings.map((offer) => (
+              <Card key={offer.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <CardTitle className="text-xl mb-2">{offer.offering_product} ↔ {offer.seeking_product}</CardTitle>
+                      <Badge variant="secondary">{offer.county || 'Kenya'}</Badge>
+                    </div>
+                    <div className="text-right text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Calendar className="h-4 w-4" />
+                        {new Date(offer.created_at).toLocaleDateString()}
+                      </div>
+                      {user?.id === offer.user_id && (
+                        <Button variant="ghost" size="sm" className="mt-2" onClick={() => handleDeleteOffer(offer.id)}>
+                          <Trash2 className="h-4 w-4 text-destructive" />
+                        </Button>
+                      )}
                     </div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-4 mb-4">
-                  <div className="p-4 border rounded-lg bg-green-50">
-                    <h4 className="font-semibold text-green-800 mb-2">Offering:</h4>
-                    <p className="text-green-700">{listing.offeredItem}</p>
-                  </div>
-                  <div className="p-4 border rounded-lg bg-blue-50">
-                    <h4 className="font-semibold text-blue-800 mb-2">Looking for:</h4>
-                    <p className="text-blue-700">{listing.requestedItem}</p>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between items-center pt-4 border-t">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <Users className="h-4 w-4 text-muted-foreground" />
-                      <span className="font-medium">{listing.farmerName}</span>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-4 mb-4">
+                    <div className="p-4 border rounded-lg bg-primary/5">
+                      <h4 className="font-semibold text-primary mb-2">Offering:</h4>
+                      <p className="text-foreground">{offer.offering_quantity} {offer.offering_unit} of {offer.offering_product}</p>
                     </div>
+                    <div className="p-4 border rounded-lg bg-secondary/30">
+                      <h4 className="font-semibold text-secondary-foreground mb-2">Looking for:</h4>
+                      <p className="text-foreground">{offer.seeking_quantity} {offer.seeking_unit} of {offer.seeking_product}</p>
+                    </div>
+                  </div>
+                  {offer.description && <p className="text-muted-foreground mb-4">{offer.description}</p>}
+                  <div className="flex justify-between items-center pt-4 border-t">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4" />
-                      <span>{listing.location}</span>
+                      <span>{offer.location}</span>
                     </div>
+                    <Button variant="outline" onClick={() => toast({ title: 'Contact', description: 'Contact feature coming soon - use the forum to reach out!' })}>Contact</Button>
                   </div>
-                  <Button onClick={() => {
-                    window.location.href = `tel:${listing.contact}`;
-                  }}>Contact Farmer</Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
-        {filteredListings.length === 0 && (
+        {!loading && filteredListings.length === 0 && (
           <Card className="text-center py-12">
             <CardContent>
               <h3 className="text-lg font-semibold mb-2">No barter opportunities found</h3>
               <p className="text-muted-foreground mb-4">
                 Try adjusting your search terms or be the first to post a barter offer!
               </p>
-              <Button onClick={() => {
-                // TODO: Open barter offer form dialog
-                alert('Barter offer form will open here');
-              }}>Post Your First Barter Offer</Button>
+              <Button onClick={() => setShowForm(true)}>
+                <Plus className="h-4 w-4 mr-2" />Post Your First Barter Offer
+              </Button>
             </CardContent>
           </Card>
         )}
